@@ -49,3 +49,54 @@ Factory.prototype = {
         })(content)
     }
 }
+
+Abstract Factory(抽象工厂模式)
+var VehicleFactory = function(subType, superType) {
+    //判断抽象工厂中是否有该抽象类
+    if (typeof VehicleFactory[superType] === 'function') {
+        //缓存类
+        function F() {};
+        //继承父类属性和方法
+        F.prototype = new VehicleFactory[superType]();
+        //将子类constructor 指向子类
+        subType.constructor = subType;
+        //子类原型继承“父类”
+        subType.prototype = new F();
+    } else {
+        //不存在该抽象类抛出错误
+        throw new Error('未创建该抽象类');
+    }
+}
+
+Builder(建造者模式)
+    //创建一位人类
+var Human = function(param) {
+        //技能
+        this.skill = param && param.skill || '保密'；
+            //兴趣爱好
+        this.hobby = param && param.hobby || '保密';
+    }
+    //类人原型方法
+Human.prototype = {
+        getSkill: function() {
+            return this.skill;
+        },
+        getHobby: function() {
+            return this.hobby;
+        }
+    }
+    //实例化姓名类
+var Named = function(name) {
+        var that = this;
+        //构造器
+        (function(name, that) {... })(name, that);
+    }
+    //创建应聘者
+var Person = function(name, work) {
+    var _person = new Human();
+    _person.name = new Named(name);
+    return _person;
+}
+var person = new Person('xiao ming', 'code');
+
+Prototype(原型模式)
