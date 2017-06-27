@@ -122,3 +122,23 @@ SlideLoopImg.prototype.changeImage = function() {
 }
 
 Singleton(单例模式)【 提供命名空间】
+var LazySingle = (function() {
+    //单例实例引用
+    var _instance = null;
+    //单例
+    function Single() {
+        return {
+            publicMethod: function() {},
+            publicProperty: '1.0'
+        }
+    }
+    //获取单例对象接口
+    return function() {
+        //如果为创建单例将创建单例
+        if (!_instance) {
+            _instance = Single();
+        }
+        //返回单例
+        return _instance;
+    }
+})();
