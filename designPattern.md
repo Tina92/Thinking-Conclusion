@@ -100,3 +100,25 @@ var Person = function(name, work) {
 var person = new Person('xiao ming', 'code');
 
 Prototype(原型模式)
+var LoopImages = functin(imgArr, container) {
+    this.imageArray = imgArr; //轮播图片数组
+    this.container = container; //轮播图片容器
+}
+LoopImages.prototype = {
+    createImage: function() {
+        //创建图片的方法
+    }
+    changeImage: function() {
+        //切换图片的方法
+    }
+}
+var SlideLoopImg = function(imgArr, container) {
+    //构造函数继承图片轮播类
+    LoopImages.call(this, imgArr, container);
+}
+SlideLoopImg.prototype = new LoopImages();
+SlideLoopImg.prototype.changeImage = function() {
+    //重写继承下来的切换图片的方法
+}
+
+Singleton(单例模式)【 提供命名空间】
