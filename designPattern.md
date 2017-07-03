@@ -1,3 +1,51 @@
+JS创建对象
+1. 对象字面量的方式
+var person = { 'firstName': 'abc' }
+
+2. 构造函数创建对象
+
+function person(firstName) {
+    this.firstName = firstName;
+}
+var newPerson = new person('abc');
+
+3. 原型方式创建对象
+
+function person(firstName) {}
+person.prototype.firstName = 'abc';
+var newPerson = new person();
+
+4. 工厂模式创建对象（ 内置对象）
+var person = new Object();
+person.firstName = 'abc';
+
+JS继承方式
+1. 原型继承
+subClass.prototype = new superClass();
+2. 构造函数继承
+
+function subClass(agruement) {
+    superClass.call(this, agruement);
+}
+3. 组合继承
+
+function superClass(name) {
+    this.name = name;
+}
+superClass.prototype.getName = function() {
+    console.log(this.name);
+};
+
+function subClass(name, time) {
+    superClass.call(this, name);
+    this.time = time;
+};
+subClass.prototype = new superClass();
+subClass.prototype.getTime = function() {
+    console.log(this.time);
+};
+
+
 Simply Factory(简单工厂模式)
 eg: function popFactory(type, text) {
         //创建一个对象， 并对对象拓展属性和方法
