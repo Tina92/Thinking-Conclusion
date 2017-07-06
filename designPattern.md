@@ -190,3 +190,31 @@ var LazySingle = (function() {
         return _instance;
     }
 })();
+
+外观模式（ Facade）【 提供更高级的同一接口 / 处理浏览器兼容】
+    //为元素绑定事件
+function addEvent(dom, type, fn) {
+    //支持DOM2级事件处理 addEvenetListener 浏览器
+    if (dom.addEventListener) {
+        dom.addEventListener(type, fn, false);
+        //不支持addEventListener但支持attachEvent方法的浏览器
+    } else if (dom.attachEvent) {
+        dom.attachEvent('on' + type, fn);
+    } else {
+        dom['on' + type] = fn;
+    }
+}
+//阻止默认行为
+var preventDefault = function(event) {
+    var event = getEvent(event);
+    //标准浏览器
+    if (event.preventDefault) {
+        event.preventDefault();
+        //IE浏览器
+    } else {
+        event.returnValue = false;
+    }
+}
+
+
+适配器模式（ Adapter）【 将一个类的接口转换为另一个接口， 适配异类框架， 适配参数， 适配数据， 适配服务端数据】
