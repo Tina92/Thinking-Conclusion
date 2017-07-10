@@ -8,3 +8,7 @@ CSS命名方案：BEM [块（block）、元素（element）、修饰符（modifi
 动画性能优化（尤其在移动端）
 eg:触发重新布局的属性有： width, height, margin, padding, border, display, top, right, bottom ,left, position, float, overflow等。应该尽量规避使用。
 不会出发重新布局的属性有：transform(其中的translate, rotate, scale), color, background等。应该尽量用这些去取代
+
+纯 Css 的 tooltips[css库：Hint.css]
+方法： 在 Html 代码的 data 属性中提供 tooltip 文本，data-tooltip = '...'
+      在 CSS 中添加 .tooltip::after{content:attr(data-tooltip);}

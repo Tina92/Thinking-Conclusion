@@ -218,3 +218,80 @@ var preventDefault = function(event) {
 
 
 适配器模式（ Adapter）【 将一个类的接口转换为另一个接口， 适配异类框架， 适配参数， 适配数据， 适配服务端数据】
+适配异类框架
+//定义框架
+var A = A || {};
+//通过ID获取元素
+A.g = function(id) {
+        return document.getElementById(id);
+    }
+    //为元素绑定事件
+A.on = function(id, type, fn) {
+    //如果传递参数是字符串则以id处理，否则以元素对象处理
+    var dom = typeof id === 'string' ? this.g(id) : id;
+    //标准DOM2级添加事件方式
+    if (dom.addEventListener) {
+        dom.addEventListener(type, fn, false);
+        //IE DOM2级添加事件方式
+    } else if (dom.attachEvent) {
+        dom.attachEvent('on' + type, fn);
+    } else {
+        dom['on' + type] = fn;
+    }
+}
+适配jQuery库
+A.g = function(id) {
+    //通过jQuery获取jQuery对象，然后返回第一个成员
+    return $(id).get(0);
+}
+A.on = function(id, type, fn) {
+    var dom = typeof id == 'string' ? $('#' + id) : $(id);
+    dom.on(type, fn);
+}
+
+
+适配参数
+
+function doSomeThing(obj) {
+    var _adapter = {
+        name: 'defalutName',
+        title: 'defalutTitle',
+        age: 'defalutAge',
+        color: 'defalutColor'
+    };
+    for (var i in _adapter) {
+        _adapter[i] = obj[i] || _adapter[i];
+    }
+    //或者 extend(_adapter,obj)注：此时可能会添加属性
+}
+
+数据适配
+
+function arrToObjAdapter(arr) {
+    return {
+        name: arr[0],
+        type: arr[1],
+        title: arr[2],
+        data: arr[3]
+    }
+}
+var arr = ['Javascript', 'book', '前端编程语言'，
+    '8月1日'
+];
+var adapterData = arrToObjAdapter(arr);
+
+服务器端数据适配
+
+function ajaxAdapter(data) {
+    //处理数据并返回新数据
+    return [data['key1'], data['key2']]
+}
+$.ajax({
+    url: 'someAdress.php',
+    success: function(data, status) {
+        if (data) {
+            //使用适配后的数据——返回的对象
+            doSomeThing(ajaxAdapter(data));
+        }
+    }
+})
