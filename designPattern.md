@@ -295,3 +295,48 @@ $.ajax({
         }
     }
 })
+
+代理模式（Proxy)【跨域问题，重定向】
+X域中被代理页面A
+<script type = 'text/javaScript'>
+    function callback(data){
+        console.log('成功接收数据',data);
+    }
+</script>
+<iframe name='proxyIframe' id='proxyIframe' src='proxyIframe'>
+</iframe>
+<form action='http://localhost...' method='post' target=''>
+    <input type='text' name='callback' value='callback'>
+    <input type='text' name='proxy' value="http://....">
+    <input type='submit' value='提交'>
+</form>
+
+X域中代理页面B
+//将URL中searcher部分的数据解析并重组，传入回调函数
+<script>
+    //页面加载后执行
+    window.onload = function(){
+        //如果不在A页面中返回，不执行
+        if(top == self) return;
+        //获取并解析searcher中的数据
+        var arr = location.search.substr(1).split('&'),fn,args;
+        for (var i = 0, len=i < arr.length , item; i<len ; i++) {
+            item = arr[i].split('=');
+            if (item[0]=='callback') {
+                
+            } else if(item[0]=='arg'){
+                args = item[1];
+            }
+        }
+        try{
+            eval('top.'+fn+'("' + args +'")');
+        }catch(e){}
+    }
+</script>
+
+Y域的接口文件C(后端接口文件)
+<?php
+    $proxy = $_POST["proxy"];
+    $callback = $_POST["callback"];
+    header("Location:".$proxy."?callback=".$callback."&arg=success");
+?>
