@@ -363,3 +363,12 @@ var decorator = function(input,fn){
         input.onclick = fn;
     }
 }
+
+桥接模式（Bridge）【先抽象提取共用部分，然后将现实与抽象通过桥接方法链接在一起，解耦】
+//抽象
+function commonFn(agruement){
+    //共同方法
+}
+//链接
+var tag = document.getElementByTagName('input');
+tag[0].onclick = function(){commonFn(this);}
