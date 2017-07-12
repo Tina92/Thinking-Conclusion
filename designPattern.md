@@ -372,3 +372,169 @@ function commonFn(agruement){
 //链接
 var tag = document.getElementByTagName('input');
 tag[0].onclick = function(){commonFn(this);}
+
+组合模式（Composite）【】
+//虚拟父类Forms
+var Forms = function(){
+    //子组件容器
+    this.children = [];
+    //当前组件元素
+    this.element = null;
+}
+Forms.prototype = {
+    init: function() {
+        throw new Error('请重写你的方法');
+    },
+    add: function() {
+        throw new Error('请重写你的方法');
+    },
+    getElement: function() {
+        throw new Error('请重写你的方法');
+    }
+}
+//容器类
+var Container = function(id, parent) {
+    //构造函数继承父类
+    Forms.call(this);
+    //模块id
+    this.id = id;
+    //模块的父容器
+    this.parent = parent;
+    //构建方法
+    this.init();
+}
+//寄生式继承父类原型方法
+inheritPrototype(Container,Forms);
+//建构方法
+Container.prototype.init = function(){
+    this.element = document.createElement('form');
+    this.element.id = this.id;
+    this.element.className = 'new-container';
+};
+//添加子元素方法
+Container.prototype.add = function(child){
+    //在子元素容器中插入子元素
+    this.children.push(child);
+    //插入当前组件元素
+    this.element.appendChild(child.getElement());
+    return this;
+}
+//获取当前元素方法
+Container.prototype.getElement = function(){
+    return this.element;
+}
+//显示方法
+Container.prototype.show = function(){
+    this.parent.appendChild(this.element);
+}
+
+var Item = function(className){
+    Forms.call(this);
+    this.className = className || '';
+    this.init();
+}
+inheritPrototype(Item, Forms);
+Item.prototype.init = function() {
+    this.element= document.createElement('div');
+    this.element.className = this.className;
+}
+Item.prototype.add = function(child){
+    //在子元素容器中插入子元素
+    this.children.push(child);
+    //插入当前组件元素树中
+    this.element.appendChild(child.getElement());
+    return this;
+}
+Item.prototype.getElement = function(){
+    return this.element;
+}
+
+var FormsGroup = function(className){
+    Forms.call(this);
+    this.className = className || '';
+    this.init();
+}
+inheritPrototype(FormsGroup, Forms);
+FormsGroup.prototype.init = function() {
+    this.element= document.createElement('div');
+    this.element.className = this.className;
+}
+FormsGroup.prototype.add = function(child){
+    //在子元素容器中插入子元素
+    this.children.push(child);
+    //插入当前组件元素树中
+    this.element.appendChild(child.getElement());
+    return this;
+}
+FormsGroup.prototype.getElement = function(){
+    return this.element;
+}
+
+var LabelItem = function(className,labelName) {
+    Forms.call(this);
+    this.className = className || 'labelItem';
+    this.init();
+}
+inheritPrototype(LabelItem, Forms);
+LabelItem.prototype.init = function(){
+    this.element = document.createElement('label');
+    this.element.className = this.className;
+    this.element.innerHTML = this.labelItem;
+}
+LabelItem.prototype.add = function () {}
+LabelItem.prototype.getElement = function () {
+    return this.element;
+}
+
+var InputItem = function(id) {
+    Forms.call(this);
+    this.id = id;
+    this.init();
+}
+inheritPrototype(InputItem, Forms);
+InputItem.prototype.init = function(){
+    this.element = document.createElement('input');
+    this.element.id = this.id;
+    this.element.type = 'text';
+}
+InputItem.prototype.add = function () {}
+InputItem.prototype.getElement = function () {
+    return this.element;
+}
+
+var SpanItem = function(text) {
+    Forms.call(this);
+    this.text = text || '';
+    this.init();
+}
+inheritPrototype(SpanItem, Forms);
+SpanItem.prototype.init = function(){
+    this.element = document.createElement('span');
+    this.element.innerHTML = this.text;
+}
+SpanItem.prototype.add = function () {}
+SpanItem.prototype.getElement = function () {
+    return this.element;
+}
+
+eg:
+var form = new Container('Container',document.body);
+form.add(
+    new Item('account','账号').add(
+        new FormsGroup().add(
+            new LabelItem('user_name','用户名：')
+        ).add(
+            new InputItem('user_name')
+        ).add(
+            new SpanItem('4到6位数字或字母')
+        )
+    ).add(
+        new FormsGroup().add(
+            new LabelItem('user_name','用户名：')
+        ).add(
+            new InputItem('user_name')
+        ).add(
+            new SpanItem('4到6位数字或字母')
+        )
+    )
+).show();
