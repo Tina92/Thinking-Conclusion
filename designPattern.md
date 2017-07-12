@@ -538,3 +538,35 @@ form.add(
         )
     )
 ).show();
+
+享元模式（Flyweight）【提取共同数据和方法作为内部数据，内部方法】
+var Flyweight = function(){
+    moveX : function (x) {
+        this.x = x;
+    },
+    moveY : function (x) {
+        this.y = y;
+    }
+}
+eg:
+    var Player = function (x, y, c) {
+        this.x = x;
+        this.y = y;
+        this.color = c;
+    }
+    Player.prototype = Flyweight;
+    Player.prototype.changeC = function (c) {
+        this.color = c;
+    }
+    var Spirit = function (x,y,r) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+    }
+    Spirit.prototype = Flyweight;
+    Player.prototype.changR = function (r) {
+        this.r = r;
+    }
+
+
+模板方法模式（Template Method）【】
