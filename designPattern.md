@@ -767,3 +767,70 @@ teacher.ask('什么是设计模式');
 student3.answer('简述观察者模式');
 student3.sleep('简述观察者模式');
 //输出结果：什么是设计模式 学生3回答问题 简述观察者模式 已被注销
+
+状态模式（State）【每一种条件作为对象内部的一种状态，面对不同判断结果，其实选择对象内的一种状态】
+eg://创建超级玛丽状态类
+var MarryState = function () {
+    //内部状态私有变量
+    var _currentState = {},
+        //动作与状态方法映射
+        states = {
+            jump ： function () {
+                //跳跃
+                console.log('jump');
+            },
+            move : function () {
+                //移动
+                console.log('move');
+            },
+            shoot : function () {
+                //射击
+                console.log('shoot');
+            },
+            squat : function () {
+                //蹲下
+                console.log('squat');
+            }
+        };
+    //动作控制类
+    var Action = {
+        //改变状态方法
+        changeState ：function () {
+            //组合动作通过传递多个参数实现
+            var _arg = arguments;
+            //重置内部状态
+            _currentState = { };
+            //如果有动作则添加动作
+            if (arg.length) {
+                //遍历动作
+                for(var i = 0, len = arg.length; i < len; i++){
+                    //向内部状态中添加动作
+                    _currentState[arg[i]] = true;
+                }
+            }
+            //返回动作控制类
+            return this;
+        },
+        //执行动作
+        goes : function () {
+            console.log('触发一次动作');
+            //遍历内部状态保存的动作
+            for(var i in currentState){
+                //如果该动作存在则执行
+                states[i] && states[i]();
+            }
+            return this;
+        }
+    }
+    //返回接口方法 change/gose
+    return{
+        change: Action.changeState,
+        goes: Action.goes
+    }
+}
+var marry = new MarryState();
+marry.change('jump', 'shoot')  //添加跳跃与射击动作
+     .goes()                   //执行动作
+     .goes()                   //执行动作
+     .change('shoot')          //添加射击动作
+     .goes();                  //执行动作
