@@ -961,3 +961,24 @@ var createValidataResult = functin(data, dom){
 ④ 单元测试
 dealData('用户名不正确', 'validate',input[0]);
 dealData(123, 'sug', input[1]);
+
+命令模式（Command）【将创建模块的逻辑封装在一个对象里】
+// 模块实现模块
+var viewCommand = (function () {
+    //视图创建
+    var tpl = {}
+    //方法集合
+    var Action = {
+        //创建方法
+        create : function () { },
+        //展示方法
+        display: function () { }
+    }
+    // 命令接口
+    return function excute(msg) { 
+        // 解析命令，如果msg.param不是数组则将其转化为数组（apply 方法要求第二个参数为数组 ）
+        msg.param = Object.prototype.toString.call(msg.param) === "[object Array]" ? msg.param : [msg.param];
+        //Action 内部调用的方法引用this,所以此处为保证作用域this执行传入Action
+        Action[msg.command].apply(Action, msg.param)
+    }
+}) ();
