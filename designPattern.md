@@ -1049,3 +1049,36 @@ CanvasCommand.excute([
     {command: 'fillStyle', param:'red'},
     {command: 'fillRect', param: [20,20,100,100]}
 ]);
+
+访问者模式（Visitor）【不改变操作对象的同时，为它添加新的操作方法】
+对象访问器
+//访问器
+var Visitor = (function () {
+    return {
+        //截取方法
+        splice ： function () {
+            //splice 方法参数，从原参数的第二个参数开始算法
+            var args = Array.prototype.splice.call(arguments, 1);
+            //对第一个参数对象执行splice方法
+            return Array.prototype.splice.apply(arguments[0],args);
+        },
+        //追加数据方法
+        push : function () {
+            //强化类数组对象，使他拥有length属性
+            var len = arguments[0].length || 0;
+            //添加的数据从原参数的第二个参数算起
+            var args = this.splice(arguments, 1);
+            //校正length属性
+            arguments[0].length = len + arguments.length -1;
+            //对第一个参数对象执行push方法
+            return Array.prototype.push.apply(arguments[0], args);
+        },
+        //弹出最后一次添加的元素
+        pop : function () {
+            //对第一个参数对象执行pop方法
+            return Array.prototype.pop.apply(arguments[0]);
+        }
+    }
+})();
+var a = new Object();   //a.length = undefined
+Visitor.push(a, 1,2,3,4); //a={0:1,1:2,2:3,3:4}
