@@ -1082,3 +1082,72 @@ var Visitor = (function () {
 })();
 var a = new Object();   //a.length = undefined
 Visitor.push(a, 1,2,3,4); //a={0:1,1:2,2:3,3:4}
+
+中介者模式（Mediator）【单向通信】
+//中介者对象
+var Mediator = function () {
+    // 消息对象
+    var _msg = {};
+    return {
+        /**
+         * 订阅消息方法
+         * 参数 type   消息名称
+         * 参数 action 消息回调函数
+         */
+         register : function (type, action) {
+             //如果该消息存在
+             if(_msg[type])
+                // 存入回调函数
+                _msg[type].push(action);
+            else{
+                //不存在 则建立该消息
+                _msg[type] = [];
+                //存入新消息回调函数
+                _msg[type].push(action);
+            }
+         },
+         /**
+          * 发布消息方法
+          * 参数 type 消息名称
+          */
+          send : function (type) {
+              //如果该消息已经被订阅
+              if(_msg[type]){
+                  //遍历已存储的消息回调函数
+                  for (var i = 0, len = _msg[type].length; i < len; i++) {
+                      // 执行该回调函数
+                      _msg[type][i] && _msg[type][i]();
+                  }
+              }
+          }
+    }
+} ();
+//设置层模块
+(function  () {
+    //消息提醒选框
+    var hideNum = document.getElementById('hide_num'),
+        //网址选框
+        hideUrl = document.getElementById('hide_url');
+    // 消息提醒选框事件
+    hideNum.onchange = function () {
+        //如果勾选
+        if(hideNum.checked){
+            //中介者发布隐藏消息提醒功能消息
+            Mediator.send('hideAllNavNum');
+        }else{
+            //中介者发布显示消息提醒功能消息
+            Mediator.send('showAllNavNum');
+        }
+    }
+    //网址选框事件
+    hideUrl.onchange = function () {
+        //如果勾选
+        if(hideUrl.checked){
+            //中介者发布隐藏所有网址功能消息
+            Mediator.send('hideAllNavUrl');
+        }else{
+            // 中介者发布显示所有网址功能消息
+            Mediator.send('showAllNavUrl');
+        }
+    }
+})();
