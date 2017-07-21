@@ -1191,3 +1191,39 @@ var Page = function () {
          }
      }
 }()
+
+迭代器模式（Iterator）【顺序一次访问聚合对象内部的元素】
+//迭代器
+var Iterator = function (item, container) {
+    //获取父容器，若container参数存在，并且可以获取该元素则获取，否则获取 document
+    var container = container && document.getElementById(container) || document,
+        // 获取元素
+        items = container.getElementByTagName(items),
+        // 获取元素长度
+        length = items.length,
+        // 当前索引值，默认：0
+        index = 0;
+        // 缓存源生数组 splice 方法
+    var splice = [].splice;
+    return {
+        // 获取第一个元素
+        first : function () {},
+        // 获取最后一个元素
+        second : function () {},
+        // 获取前一个元素
+        pre : function () {},
+        // 获取后一个元素
+        next : function () {},
+        // 获取某一个元素
+        get　: function () {},
+        // 对某一个元素执行某一个方法
+        dealItem : function () {},
+        // 排他方式处理某一个元素
+        exclusive : function () {}
+    }
+}
+var  demo = new Iterator('li', 'container');
+console.log(demo.first());
+demo.dealEach(function (text, color) {
+    ...
+},'test', 'pink');
