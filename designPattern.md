@@ -1308,3 +1308,59 @@ var Interpreter = (function () {
 
 var path = Interpreter(document.getElementById('..'));
 console.log(path.join('>'));
+
+链模式（Operate of Responsibility）【实现对同一个对象多个方法链式调用,关键字：extend】
+var A = function (selector) {
+    return new A.fn.init(selector);
+}
+A.fn = A.prototype = {
+    //强化构造器
+    constructor : A,
+    init : function (selector) {
+        console.log(this.constructor);
+    }
+}
+A.fn.init.prototype = A.fn;
+//对象拓展
+A.extend = A.fn.extend =function(){
+    //拓展对象从第二个参数算起
+    var i =1,
+        // 获取参数长度
+        len = arguments.length,
+        //第一个参数为源对象
+        target = arguments[0],
+        //拓展对象中的属性
+        j;
+    //如果只传一个参数
+    if(i == len){
+        //源对象为当期对象
+        target = this;
+        // i从0计数
+        i--;
+    }
+    //遍历参数中拓展对象
+    for(; i<len;i++){
+        //遍历拓展对象中的属性
+        for(j in arguments[i]){
+            // 拓展源对象
+            target[j] = arguments[i][j];
+        }
+    }
+    //返回源对象
+    return target;
+}
+// 拓展一个对象
+var demo = A.extend({first: 1},{second: 2},{third: 3});
+demo //{first: 1,second: 2, third: 3}
+// 拓展A.fn 方式一
+A.extend(A.fn, {version : '1.0'});
+A('demo').version; //1.0
+// 拓展A.fn 方式二
+A.extend({getVersion: function () {return this.version}})
+A('demo').getVersion(); //1.0
+// 拓展A方法一
+A.extend(A,{author: '111'});
+A.author //111
+// 拓展A方法二
+A.extend({nickname: '222'});
+console.log(A.nickname); //222
