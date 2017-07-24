@@ -1364,3 +1364,18 @@ A.author //111
 // 拓展A方法二
 A.extend({nickname: '222'});
 console.log(A.nickname); //222
+
+委托模式（Entrust）【将子元素的事件委托给父元素，然后通过事件冒泡传递】
+<div id="article">
+    <p>第一段文字</p>
+</div>
+var article =document.getElementById('article');
+article.onclick = function () {
+    var e = e || window.event, tar = e.target || e.srcElement;//核心
+    if (tar.nodeName.toLowerCase() === 'p') {
+        tar.innerHTML = '我要更改这段内容！'；
+    }
+}
+var p = document.createElement('p');
+p.innerHTML = '新增一段内容';
+article.appendChild(p);
