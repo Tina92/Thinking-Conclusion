@@ -1597,3 +1597,57 @@ article.appendChild(p);
         liTpl = A.formateString(A.view('li'),{li : A.view(['strong','span'])}),
     //......
  }
+
+惰性模式（layier）【拖延模式，延迟执行，重定义】
+第一种：加载即执行
+//添加绑定事件方法on
+A.on = function (dom, type, fn) {
+    //如果支持addEventListener方法
+    if(document.addEvenetListener) {
+        //返回新定义方法
+        return function (dom, type, fn) {
+            dom.addEventListener(type, fn, false);
+        }
+    }
+    //如果支持attachEvent 方法（IE)
+    else if(document.attachEvent){
+        //返回新定义方法
+        return function (dom, type, fn) {
+            dom.attachEvent('on'+type, fn);
+        }
+        //定义on方法
+    }else{
+        //返回新定义方法
+        return function (dom, type, fn) {
+            dom['on' + type] = fn;
+        }
+    }
+}();
+A.on //重定义A.on方法
+
+第二种：惰性执行
+//添加绑定事件方法on
+A.on = function (dom, type, fn) {
+    //如果支持addEventListener方法
+    if(dom.addEvenetListener) {
+        //显示重新定义 on 方法
+        A.on = function (dom, type, fn) {
+            dom.addEventListener(type, fn, false);
+        }
+    // 如果支持 attachEvent 方法（IE）
+    }else if(dom.attachEvent){
+        // 显示重定义 on 方法
+        A.on = function (dom, type, fn) {
+            dom.attachEvent('on' + type, fn);
+        }
+    //如果支持DOM0 级事件绑定
+    }else{
+        //显示重定义 on 方法
+        A.on = function (dom, type, fn) {
+            dom['on' + type] = fn;
+        }
+    }
+    // 执行重定义 on 方法
+    A.on(dom, type, fn);
+}
+A.on(document.body,'click', functin(){}) //给元素绑定事件时，A.on重定义
