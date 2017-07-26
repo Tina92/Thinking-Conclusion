@@ -1547,3 +1547,53 @@ article.appendChild(p);
          }, p.time)
      }
  }
+
+ 简单模板模式（Simple template）【优化内存开销，减少节点操作】
+ //模板渲染方法
+ A.formateString = function(str, data){
+     return str.replace(/\{#(\w+)#\}/g, function(match, key){return typeof data[key] === undefined ? '' : data[key
+     ]});
+ }
+ //模板生成器 name: 标识
+ A.view = function (name) {
+     // 模板库
+     var v = {
+         // 代码模板
+         code : '<pre><code>{#code#}</code></pre>',
+         // 图片模板
+         img : '<img src="{#src#}" alt="{#alt#}" title="{#title#}" />',
+         // 带有 id 和类的模块模板
+         part : '<div id="{#id#} class="{#class#}">{#part#}</div>',
+         // 组合模板
+         theme : [
+             '<div>',
+                '<h1>{#title#}</h1>',
+                '{#content#}'，    
+             '</div>'
+         ].join('')
+     }
+     // 如果参数是一个数组，则返回多行模板
+     if(Object.prototype.toString.call(name) === "[object Array"){
+         //模板缓存器
+         var tpl = '';
+         //便利标识
+         for(var i = 0, len = name.length; i < len ; i++){
+             //模板缓存器追加模板
+             tpl += arguements.callee(name[i]);
+         }
+         // 返回最终模板
+         return tpl;
+     }else{
+         //如果模板库中有该模板则返回该模板，否则返回简易模板
+         return v[name] ? v[name] : ('<' + name + '>{#' + name + '#}</' + name + '>');
+     }
+ }
+ eg： 
+ 'listPart' : function (data) {
+     // .......
+        //模块模板
+        tpl = A.view(['h2', 'p', 'ul']),
+        // 列表项模板
+        liTpl = A.formateString(A.view('li'),{li : A.view(['strong','span'])}),
+    //......
+ }
