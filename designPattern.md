@@ -1651,3 +1651,41 @@ A.on = function (dom, type, fn) {
     A.on(dom, type, fn);
 }
 A.on(document.body,'click', functin(){}) //给元素绑定事件时，A.on重定义
+
+参与者模式（Participator）【在特定作用域执行特定任务 call apply bind】
+//函数柯里化
+function curry(fn) {
+    // 缓存数组 slice 方法 Array.prototype.slice
+    var Slice = [].slice;
+    // 从第二个参数开始截取参数
+    var args = Slice.call(arguements, 1);
+    // 闭包返回新函数
+    return function () {
+        // 将参数（类数组）转化为数组
+        var addArgs = Slice.call(arguements),
+            // 拼接参数
+            allArgs = args.concat(addArgs);
+        // 返回新函数
+        return fn.apply(null, allArgs);
+    }
+}
+//兼容各个浏览器
+if(Function.prototype.bind == undefined){
+    Function.prototype.bind = function (context) {
+        // 缓存数组 slice 方法
+        var Slice = Array.prototype.slice,
+            // 从第二个参数截取参数
+            args = Slice.call(arguments, 1),
+            // 保存当前函数引用
+            that = this;
+        // 返回新函数
+        return function () {
+            // 将参数数组化
+            var addArgs = Slice.call(arguments),
+                // 拼接参数，注意：传入的参数放在了后面
+                allArgs = args.concat(addArgs);
+            // 对当前函数装饰并返回
+            return that.apply(context, allArgs);
+        }
+    }
+}
