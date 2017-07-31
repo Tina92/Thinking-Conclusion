@@ -1690,7 +1690,7 @@ if(Function.prototype.bind == undefined){
     }
 }
 
-等待者模式（waiter）【】
+等待者模式（waiter）【when, done, fail 】
 //等待对象
 var Waiter = function () {
     //注册了的等待对象容器
@@ -1795,4 +1795,118 @@ var Waiter = function () {
         // 返回等待者对象
         return that;
     }
+}
+
+模块化
+同步模块模式（SMD）【 】
+//模块管理器
+//定义模块管理器单体对象
+var F = F || {};
+/**
+ * 定义模块方法
+ * @param str  模块路由
+ * @param fn  模块方法
+ */
+F.define = function(str, fn) {
+    // 解析模块路由
+    var parts = str.split('.'),
+        //old 当前模块的祖父模块，parent当前模块父模块
+        // 如果在闭包中， 为了屏蔽对模块直接访问，建议将模块添加给闭包内部私有变量
+        old = parent = this,
+        // i 模块层级， len 模块层级长度
+        i = len = 0;
+    // 如果第一个模式是模块管理器单体对象，则移除
+    if(parent[0] === 'F'){
+        parts = parts.slice(1);
+    }
+    // 屏蔽对define与module模块方法的重写
+    if(parts[0] === 'define' || parts[0] === 'module') return;
+    //遍历路由模块并定义每层模块
+    for(len = parts.length; i < len; i++){
+        // 如果父模块不存在当前模块
+        if(typeof parent[parts[i]] === 'undefined'){
+            // 声明当前模块
+            parent[parts[i]] = {};
+        }
+        //缓存下一层级的祖父模块
+        old = parent;
+        //缓存下一层级父模块
+        parent = parent[parts[i]];
+    }
+    // 如果给定模块方法则定义该模块方法
+    if(fn){
+        //此时 i 等于parts.length, 故减一
+        old[parts[--i]] = fn();
+    }
+    //返回模块管理器单体对象
+    return this;
+});
+
+//创建模块
+//为dom模块添加dom方法和html方法
+F.define('dom', function() {
+    // 简化获取元素方法
+    var $ = function (id) {
+        $.dom = document.getElementById(id);
+        //返回构造函数对象
+        return $;
+    }
+    //获取或职责设置元素内容
+    $.html = function (html) {
+        // 如果传参则设置元素内容，否则获取元素内容
+        if(html){
+            this.dom.innerHTML = html;
+            return this;
+        }else{
+            return this.dom.innerHTML;
+        }
+    }
+    //返回构造函数
+    return $;
+});
+// 测试用例（页面元素：<div id="test"> test </div>）
+// F.dom('test').html(); //"test"
+
+//模块调用方法
+F.module = function () {
+    //将参数转化为数组
+    var args = [].slice.call(arguements),
+        //获取回调执行函数
+        fn = args.pop(),
+        // 获取依赖模块，如果 arg[0] 是数组，则依赖模块为 args[0]。 否则依赖模块为 argparts = args[0] && args[0] instanceof Array ? args[0]:args,
+        // 依赖模块列表
+        modules = [],
+        // 模块路由
+        modIDs = '',
+        // 依赖模块索引
+        i = 0,
+        // 依赖模块长度
+        ilen = parts.length,
+        // 父模块，模块路由层级索引，模块路由层级长度
+        parent, j, jlen;
+    // 遍历依赖模块
+    while(i < ilen) {
+        // 如果是模块路由
+        if(typeof parts[i] === 'string') {
+            // 设置当前模块父对象（F)
+            parent = this;
+            // 解析模块路由，并屏蔽掉模块父对象
+            modIds = parts[i].replace(/^F\./, '').split('.');
+            // 遍历模块路由层级
+            for(j = 0, jlen = modIDs.length; j < jlen; j++){
+                // 重置父模块
+                parent = parent[modIDs[j]] || false;
+            }
+            // 将模块添加到依赖模块列表中
+            modules.push(parent);
+        // 如果是模块对象
+        }else{
+            // 直接加入依赖模块列表中
+            modules.push(parts[i]);
+        }
+        // 取下一个依赖模块
+        i++;
+    }
+    // 执行回调执行函数
+    fn.apply(null, modules);
 }
