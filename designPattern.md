@@ -2123,3 +2123,65 @@ F.module('lib/template', function () {
         };
     return _TplEngine;
 })
+
+MVC模式（model-view-controller）
+//页面加载后创建MVC对象
+$(function () {
+    // 初始化 MVC 对象
+    var MVC = MVC || {};
+    // 初始化 MVC 数据模型层
+    MVC.model = function() {
+        //内部数据对象
+        var M = {};
+        //服务器端获取额数据
+        M.data = {};
+        //配置数据，页面加载时即提供
+        M.conf = {};
+        //返回数据模型层对象操作方法
+        return {
+            // 获取服务器端数据
+            getData : function (m) {
+                //根据数据字段获取数据
+                return M.data[m];
+            },
+            // 获取配置数据
+            getConf : function (c) {
+                //根据配置数据字段获取配置数据
+                return M.conf[c]
+            },
+            //设置服务器端数据（通常将服务器端异步获取到的数据，更新该数据）
+            setData : function (m, v) {
+                // 设置数据字段m对应的数据v
+                M.data[m] = v;
+                return this;
+            },
+            //设置配置数据（通常是在页面中执行某些操作，为做记录而更新配置数据）
+            setConf : function (c, v) {
+                //设置配置数据字段c对应的配置数据
+                M.conf[c]= v;
+                return this;
+            }
+        }
+    }();
+    // 初始化 MVC 视图层
+    MVC.view = function() {
+        // 模型数据层对象操作方式引用
+        var M = MVC.model;
+        // 内部视图创建方法对象
+        var V = {};
+        // 获取视图接口方法
+        return function (v) {
+            // 根据视图名称返回视图
+            V[v]();
+        }
+    }();
+    // 初始化 MVC 控制器层
+    MVC.ctrl = function() {
+        //模型数据层对象操作方法引用
+        var M = MVC.model;
+        //视图数据层对象操作方法引用
+        var V = MVC.view;
+        // 控制器创建方法对象
+        var C = {};
+    }();
+});
