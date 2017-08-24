@@ -1,5 +1,8 @@
 ES7:
-
+Array
+includes() 数组中是否包含某个值
+Array.prototype.includes(value : any) : boolean
+eg:['a', 'b', 'c'].includes('a') //true
 
 ES8:
 String
