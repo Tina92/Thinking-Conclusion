@@ -82,3 +82,37 @@ this 是在运行时绑定的，并不是在编写时绑定，它的上下文取
 隐式绑定
 
 当函数引用有上下文对象时，隐式绑定规则会把函数调用中的this绑定到这个上下文对象。对象属性引用链中只有最后一层会影响调用位置（就近原则）。
+
+隐式丢失
+```javascript
+    function foo() {
+        console.log(this.a);
+    }
+    function doFoo(fn) {
+        // fn 其实引用的是foo
+        fn();
+    }
+    var obj = {
+        a:2,
+        foo: foo
+    };
+    var a = "oops,global";
+    doFoo( obj.foo ); //“oops, global”
+```
+显式绑定
+
+call(..) 和 apply(...)
+
+硬绑定  
+```javascript
+function foo() {
+    console.log( this.a );
+}
+var obj = { a:2 };
+var bar = function() {
+    foo.call( obj );
+}
+bar(); //2
+bar.call( window ); //2  硬绑定的bar不可能再修改它的this
+```
+硬绑定的典型应用场景就是创建一个包裹函数，传入所有的参数并返回接收到的所有值。 ES5 中提供的内置方法 Function.prototype.bind 就是一个硬绑定
