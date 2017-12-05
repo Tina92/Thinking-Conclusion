@@ -115,4 +115,124 @@ var bar = function() {
 bar(); //2
 bar.call( window ); //2  硬绑定的bar不可能再修改它的this
 ```
-硬绑定的典型应用场景就是创建一个包裹函数，传入所有的参数并返回接收到的所有值。 ES5 中提供的内置方法 Function.prototype.bind 就是一个硬绑定
+硬绑定的典型应用场景就是创建一个包裹函数，传入所有的参数并返回接收到的所有值。 ES5 中提供的内置方法 Function.prototype.bind 就是一个硬绑定，forEach 之类的上下文绑定
+
+new 绑定
+
+使用 new 来调用函数时会自动执行下面的操作：
+1. 创建（或者说构造）一个全新的对象；
+2. 这个新对象会被执行 [[原型]] 连接；
+3. 这个新对象会绑定到函数调用的this;
+4. 如果函数没有返回其他对象，那么new表达式中的函数调用会自动返回这个新对象。
+
+this 绑定的优先级
+
+new 绑定 > 显式绑定 > 隐式绑定 > 默认绑定
+
+绑定例外
+1. 把 null 或者 undefined 作为 this 的绑定对象传入 call、 apply或者 bind, 这些值在调用时会被忽略，实际应用的是默认绑定规则。
+2. “间接引用” ，调用时应用默认绑定规则
+```javascript
+function foo() {
+    console.log( this.a );
+}
+var a = 2;
+var o = {a:3, foo: foo};
+var p = {a:4};
+o.foo(); // 3
+(p.foo = o.foo)(); // 2
+```
+
+软绑定
+```javascript
+function foo() {
+    console.log("name:" + this.name);
+}
+
+var obj = { name:"obj" }, obj2 = { name:"obj2" }, obj3 = {name:"obj3"};
+
+var fooOBJ = foo.softBind( obj );
+fooOBJ(); //name: obj
+obj2.foo = foo.softBind(obj);
+obj2.foo(); //name: obj2 
+fooOBJ.call(obj3); //name:obj3
+setTimeout(obj2.foo, 10); //name: obj <-- 应用了软绑定
+```
+
+箭头函数的 this
+ this 在创建时绑定创建时的对象，不会被调用的对象所影响
+
+
+##对象
+
+对象的定义： 
+声明形式
+```javascript
+    var myObj = {
+        key: value
+        //...
+    };
+```
+构造形式
+```javascript
+    var myObj = new Object();
+    myObj.key = value;
+```
+JavaScript 的类型
+
+string / number / boolean/ null / undefined / object
+
+JavaScript 的内置对象(内置函数)
+
+String / Number / Boolean / Object / Function / Array / Date / RegExp / Error
+
+```javascript
+    var strPrimitive = "I am a string";
+    typeof strPrimitive; // "string"
+    strPrimitive instanceof String; // false
+
+    var strObject = new String("I am a string");
+    typeof strObject; //"object"
+    strObject instanceof String; // true
+```
+ps:  引擎会自动把字面量转换为 String 对象
+
+ES6 增加了可计算属性名，需使用 [] 包裹表达式
+```javascript
+    var prefix = "foo";
+    var myObject = {
+        [prefix+"bar"]: "hello"
+    };
+    myObject["foobar"]; //hello
+```
+数组也是对象，仍然可以给数组添加属性，但不影响length,但是如果你向数据添加的属性，属性名看起来像数字，则会成为数值下标，影响length
+```javascript
+    var myArray = ["foo", 42, "bar"];
+    myArray.length; //3
+    myArray.baz = "baz";    
+    myArray.length; //3
+    myArray["3"] = "baz";
+    myArray.length; //4
+```
+JSON.parse() //是从一个字符串中解析出json对象
+JSON.stringfy() //是从一个对象解析出字符串
+
+属性描述符
+Object.getOwnPropertyDescriptor(objectName,attritude);
+Object.defineProperty(objectName, attritude,{
+    value: ,
+    writable:true,  //是否可写
+    configurable:true,  //是否可配置
+    enumerable:true     //是否可枚取
+});
+
+对象禁止扩展,可修改
+Object.preventExtensions(..)
+
+对象密封，不可扩展也不可修改,configurable:false
+Object.seal(..)
+
+对象冻结，最高级别不可变性，writable:false
+Object.freeze(..)
+
+对象默认的控制属性值的设置和获取的是 [[Put]] 和 [[Get]]
