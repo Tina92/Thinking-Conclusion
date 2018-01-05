@@ -166,6 +166,7 @@ setTimeout(obj2.foo, 10); //name: obj <-- 应用了软绑定
 ##对象
 
 对象的定义： 
+JavaScript 中的对象有字面形式和构造形式。字面形式更常用，不过有时候构造形式可以提供更多选项。
 声明形式
 ```javascript
     var myObj = {
