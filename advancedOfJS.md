@@ -215,10 +215,11 @@ ES6 增加了可计算属性名，需使用 [] 包裹表达式
     myArray["3"] = "baz";
     myArray.length; //4
 ```
-JSON.parse() //是从一个字符串中解析出json对象
-JSON.stringfy() //是从一个对象解析出字符串
+```JSON.parse() //是从一个字符串中解析出json对象```
+```JSON.stringfy() //是从一个对象解析出字符串```
 
 属性描述符
+```javascript
 Object.getOwnPropertyDescriptor(objectName,attritude);
 Object.defineProperty(objectName, attritude,{
     value: ,
@@ -226,7 +227,7 @@ Object.defineProperty(objectName, attritude,{
     configurable:true,  //是否可配置
     enumerable:true     //是否可枚取
 });
-
+```
 对象禁止扩展,可修改
 Object.preventExtensions(..)
 
@@ -237,3 +238,39 @@ Object.seal(..)
 Object.freeze(..)
 
 对象默认的控制属性值的设置和获取的是 [[Put]] 和 [[Get]]
+
+对象隐藏属性 getter 和 setter , setter 覆盖单个属性默认 [[Put]]
+
+#存在性
+in in操作符会检查属性是否在对象及其 [[Prototype]] 原型链中。
+
+hasOwnProperty(..) 只会检查属性是否在对象中，不会检查 [[Prototype]] 链，可以使用 Object.prototype.hasOwnProperty.call(myObject,"a") 显示绑定到对象上。
+
+Object.keys(..) 返回一个数组，包含所有可枚举属性
+
+Object.getOwnPropertyNames(..) 返回一个数组，包含所有属性，无论它们是否可枚举
+
+#遍历
+
+遍历数组下标  for ... in / forEach() / every() / some()
+
+遍历数组值  for ... of / Symbol.iterator & next()
+
+#混合对象 “类”
+
+类/继承是一种建模方法，面向对象编程强调的是数据和操作数据的行为本质上是互相关联的。 在软件设计中类是一种可选的模式。
+
+构造函数
+```javascript
+ class CoolGuy {
+     specialTrick = nothing
+     CoolGuy( trick ) {
+         specialTrick = trick
+     } //构造函数
+     showOff() {
+         output( "Here's my trick: ",specialTrick )
+     }
+ }
+ Joe = new CoolGuy( "jumping rope" )
+ Joe.showOff()//Here's my trick: jumping rope
+ ```
