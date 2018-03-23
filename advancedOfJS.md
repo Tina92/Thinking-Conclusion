@@ -273,4 +273,46 @@ Object.getOwnPropertyNames(..) 返回一个数组，包含所有属性，无论�
  }
  Joe = new CoolGuy( "jumping rope" )
  Joe.showOff()//Here's my trick: jumping rope
+ 
  ```
+
+ inherited: 继承，子类继承父类
+
+ super: 调用父类引用，两者之间可以实现相对引用
+ ```javascript
+ class Vehicle {
+     engines = 1;
+     ignition() {
+         output( "Turning on my engine." );
+     }
+     drive() {
+         ignition();
+         output( "Steering and moving forward!" );
+     }
+ }
+
+ class Car inherits Vehicle {
+     wheels = 4;
+     drive() {
+         inherited: drive()
+         output( "Rolling on all ", wheels, " wheels!" );
+     }
+ }
+
+ class SpeedBoat inherits Vehicle {
+     engines = 2;
+     ignition() {
+         output( "Turning on my ", engines, " engines." )
+     }
+     pilot() {
+         inherited: drive()
+         output( "Speeding throught the water with ease!" )
+     }
+ }
+```
+上文中 ignition() 方法定义的多态性取决与你在哪个类的实例中引用它。
+
+
+#原型
+
+Object.create(..) 创建一个对象并把这个对象的 [[Prototype]] 关联到指定的对象
