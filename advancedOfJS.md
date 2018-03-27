@@ -316,3 +316,44 @@ Object.getOwnPropertyNames(..) 返回一个数组，包含所有属性，无论�
 #原型
 
 Object.create(..) 创建一个对象并把这个对象的 [[Prototype]] 关联到指定的对象
+
+`myObject.foo = bar` 出现三种情况
+· 如果在 [[Prototype]] 链上层存在名为 foo 的普通数据访问属性并且没有被标记为只读 (writable:false)，那么会直接在 myObject 中添加一个名为 foo 的新属性，它是屏蔽属性，myObject.foo 总是会选择原型链中最底层的 foo 属性
+· 如果在 [[Prototype]] 链上层存在 foo，但是它被标记为只读 (writable:false)，那么无法修改已有属性。如果运行在严格模式下，代码会抛出错误。否则，这条赋值语句就会被忽略。总之，不会发生屏蔽
+· 如果在 [[Prototype]] 链上层存在 foo 并且它是一个 setter, 那就一定会调用这个 setter。foo 不会被添加到 myObject, 也不会重新定义 foo 这个 setter。
+
+第二、三种情况可以通过 Object.defineProperty(..) 来向 myObject 添加 foo。
+
+```javascript
+    function Foo() {
+        // ...
+    }
+    Foo.prototype.constructor === Foo; // true
+
+    var a = new Foo();
+    a.constructor === Foo; //true
+```
+new 劫持所有普通函数并用构造对象的形式来调用它。
+
+a.constructor 只是通过默认的 [[Prototype]] 委托指向 Foo, `.constructor` 是 Foo 函数在声明时的默认属性。
+
+```javascript
+    function Foo() { /*..*/ }
+    Foo.prototype = { /*..*/ }; // 创建一个新的原型对象
+    var a1 = new Foo();
+    a1.constructor === Foo; // false
+    a1.constructor === Object; //true
+```
+
+修改对象的 [[Prototype]] 的关联:
+
+`Bar.prototype = Object.create( Foo.prototype )`//ES6 之前
+
+`Object.setPrototypeOf( Bar.prototype, Foo.prototype )`//ES6 之后
+
+调用 `Object.create(..)` 会凭空创建一个“新”对象并把新对象内部的 [[Prototype]] 关联到你指定的对象
+
+错误做法：
+`Bar.prototype = Foo.prototype;`//会直接修改Foo.prototype
+
+`Bar.prototype = new Foo();`//会影响Bar()的后代
