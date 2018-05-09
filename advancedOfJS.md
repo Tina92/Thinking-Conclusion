@@ -160,6 +160,7 @@ setTimeout(obj2.foo, 10); //name: obj <-- 应用了软绑定
 ```
 
 箭头函数的 this
+
  this 在创建时绑定创建时的对象，不会被调用的对象所影响
 
 
@@ -216,6 +217,7 @@ ES6 增加了可计算属性名，需使用 [] 包裹表达式
     myArray.length; //4
 ```
 ```JSON.parse() //是从一个字符串中解析出json对象```
+
 ```JSON.stringfy() //是从一个对象解析出字符串```
 
 属性描述符
@@ -357,3 +359,168 @@ a.constructor 只是通过默认的 [[Prototype]] 委托指向 Foo, `.constructo
 `Bar.prototype = Foo.prototype;`//会直接修改Foo.prototype
 
 `Bar.prototype = new Foo();`//会影响Bar()的后代
+
+#“类”的关系
+内省/反射     
+<li>a instanceof Foo //找出a(对象)的祖先是不是Foo(函数)</li>
+<li>Foo.prototype.isPrototype(a); //true</li>
+<li>a._proto_ === Foo.prototype; //true</li>
+
+对象关联
+
+`Object.create(..)` 会创建一个新对象并把它关联到我们指定的对象，可以使用[[Prototype]],而避免用 new 的构造函数调用会生成 .prototype 和 .constructor
+
+备注： `Object.create(null)`会创建一个拥有空（或者说null）[[Prototype]]链接的对象，这个对象无法进行委托。由于这个对象没有原型链，所以instanceof操作符无法进行判断
+
+```javascript
+ var anotherObject = {
+     cool: function() {
+         console.log("cool!");
+     }
+ };
+ var myObject = Object.create( anotherObject );
+ myObject.cool();//cool!  直接委托
+ myObject.doCool =  function(){
+     this.cool();// 内部委托
+ };
+ myObject.doCool();//cool!
+ ```
+内部委托比起直接委托让API接口设计更加清晰
+
+###行为委托
+
+[[Prototype]] 机制就是指对象中的一个内部链接引用另一个对象
+
+#类理论
+```javascript
+ class Task {
+     id;
+     //构造函数 Task()
+     Task(ID) { id = ID; }
+     outputTask() { output(id); }
+ }
+
+ class XYZ inherits Task {
+     label;
+     //构造函数 XYZ()
+     XYZ(ID, Label) { super(ID); label = Label; }
+     outputTask() { super(); output( label ); }
+ }
+
+ class ABC inherits Task {
+     //...
+ }
+ ```
+ XYZ,ABC 都是类
+#委托理论
+```javascript
+ Task = {
+     setID: function(ID){ this.id = ID; },
+     outputID: function(){ console.log(this.id); }
+ };
+
+ // 让XYZ委托Task
+ XYZ = Object.create( Task );
+ XYZ.prepareTask = function(ID, Label) {
+     this.setID( ID );
+     this.label = Label;
+ };
+ XYZ.outputTaskDetails = function() {
+     this.outputID();
+     console.log(this.label);
+ };
+ // ABC = Object.create(Task);
+ // ABS ... = ...
+ ```
+ XYZ，ABC 都是对象
+
+ 委托行为意味着某些对象(XYZ)在找不到属性或者方法引用时会把这个请求委托给另一个对象（Task）。不存在父类到子类的垂直组织关系，可以通过任意方向的委托关联
+ 
+#比较两者的思维模型
+面向对象：
+```javascript
+ functon Foo(who) {
+    this.me = who;
+ }
+ Foo.prototype.identify = function() {
+     return "I am" + this.me
+ }
+ function Bar(who) {
+     Foo.call( this,who );
+ }
+ Bar.prototype = Object.create(Foo.prototype);
+ Bar.prototype.speak = function() {
+     alert("Hello, " + this.identify() + ".");
+ };
+
+ var b1 = new Bar("b1");
+ var b2 = new Bar("b2");
+
+ b1.speak();
+ b2.speak();
+ ```
+ 对象关联:
+ ```javascript
+  Foo = {
+      init: function(who) {
+          this.me = who;
+      },
+      identify: function() {
+          return "I am" + this.me;
+      }
+  };
+  Bar = Object.create( Foo );
+  Bar.speak = function() {
+      alert("Hello, "+ this.identify() + ".");
+  };
+  var b1 = Object.create( Bar );
+  b1.init("b1");
+  var b2 = Object.create( Bar );
+  b2.init("b2");
+  b1.speak();
+  b2.speak();
+ ```
+ 
+ 类风格代码的思维模型强调实体以及实体间的关系
+
+ 对象关联可以更好地支持关注分离原则，创建和初始化不需要合并为一个步骤
+ 
+ #更好的语法
+
+ 在ES6中可以使用对象的字面形式来改写之前繁琐的属性赋值语法，然后用`Object.setPrototypeOf(..)` 来修改它的[[Prototype]]
+
+ 匿名函数的缺点：
+<ul>
+    <li>调试栈更难追踪</li>
+    <li>自我引用（递归，事件（解除）绑定，等等）更难</li>
+    <li>代码更难理解</li>
+</ul>
+
+简洁方法：
+```javascript
+var Foo = {
+    bar() { /*..*/ },
+    baz: function baz() { /*..*/ }
+};
+```
+
+无法规避第二个缺点
+
+#内省
+
+类实例的自省是通过创建方式来判断对象的结构和功能
+
+内省模式： “鸭子类型” 
+
+###ES6 中的class
+
+class陷阱
+
+class是现有 `[[Prototype]]` (委托)机制的语法糖，不是复制
+
+1. class无法定义类成员属性，只能使用.prototype语法
+
+2. class语法面临意外屏蔽的问题
+
+3. super的绑定是静态的，声明时绑定
+
