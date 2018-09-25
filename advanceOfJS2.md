@@ -109,3 +109,210 @@ NaN 是 Javascript 中唯一一个不等于自身的值
 特殊等式
     `Object.is(..)` 判断两个值是否绝对相等
 
+值复制和引用复制
+```javascript
+    var a = 2;
+    var b = a;// b是a的值的副本
+    b++;
+    a; //2
+    b; //3  值复制
+    var c = [1,2,3];
+    var d = c; // d是[1,2,3]的一个引用
+    d.push(4);
+    c;  //[1,2,3,4]
+    d; //[1,2,3,4] 引用复制
+```
+简单值通过值复制的方式来赋值/传递，包括 null、undefined、字符串、数字、布尔和 symbol;
+复合值——对象和函数，则通过引用复制的方式来赋值/传递
+```javascript
+    function foo(x) {
+        x = x + 1;
+        x; //3
+    }
+    var a = 2;
+    var b = new Number( a ); //Object(a) 是 a 的数字对象，是引用
+
+    foo(b);
+    console.log(b);    //是 2，不是 3
+```
+
+#原生函数
+
+* String()
+* Number()
+* Boolean()
+* Array()
+* Object()
+* Function()
+* RegExp()
+* Date()
+* Error()
+* Symbol()
+
+构造函数创建出来的是封装了基本类型值的封装对象
+```javascript
+    var a = new String("abc");
+    typeof a;       // 是"object"
+    a instanceof String;    //true
+    Obejct.prototype.toString.call(a);  //"[object String]"
+```
+#封装
+所有 typeof 返回值为"object"的对象都包含一个内部属性[[Class]],这个属性一般通过 Object.prototype.toString.call(..)来查看。
+
+由于浏览器为 `.length` 这样的常见情况做了性能优化，使用封装对象反而会降低执行效率，使用 "abc" 这样的字面量对象更合适
+
+封装对象释疑
+```javascript
+    var a = new Boolean( false );
+    !a; //false
+```
+#拆封
+想要得到封装对象中的基本类型值，可以使用 valueOf() 函数
+
+#原生函数作为构造函数
+* Array(..)
+ Array 构造函数中只带一个数字参数时，该参数会被作为数组的预设长度，而非充当数组中的一个元素，形成空元素数组
+
+* Object(..)、Function(..)和RegExp(..)
+ 非必要情况，尽量少用
+
+* Date(..)和Error(..)
+ 创建日期对象： `new Date();`
+
+ 获取时间戳： `(new Date()).getTime();`或者 `Date.now()`
+
+ 创建错误对象
+```javascript
+    function foo(x) {
+        if(!x) {
+            throw new Error("x wasn't provided");
+        }
+        //...
+    }
+```
+
+* Symbol(..)
+ 具有唯一性的特殊值,符号并非对象，是一种简单标量的基本类型
+ `var a = Symbol(..)`
+
+* 原生原型
+ 原生构造函数都有自己的 .prototype 对象，这些对象包含其对应子类型所特有的行为特征
+
+ 将原型作为默认值
+ ```javascript
+  function isThisCool(vals, fn, rx) {
+      vals = vals || Array.prototype;
+      fn = fn || Function.prototype;
+      rx = rx || RegExp.prototype;
+      return rx.test(
+          vals.map( fn ).join("")
+      );
+  }
+  isThisCool();     //true
+  isThisCool(
+      ["a","b","c"],
+      function(v){ return v.toUpperCase(); }
+      /D/
+  );            //false
+ ```
+ 这种方法的一个好处是 .prototypes 已被创建并且仅创建一次，Function.prototype 是一个空函数， RegExp.prototype 是一个“空”的正则表达式，而 Array.prototype 是一个空数组。如果默认值随后被更改，就不要使用 .prototype。
+
+#强制类型转换
+```javascript
+ var a = 42;
+ var b = a + ""; // 隐式强制类型转换
+ var c = String(a); // 显式强制类型转换
+```
+
+* 抽象值操作
+ ToString
+   基本类型值的字符串化规则为：null 转换为 "null"，undefined 转换为 "undefined"，true转换为 "true"。
+ JSON 字符串化
+ ```javascript
+    JSON.stringify(42); //"42"
+    JSON.stringify("42");   //""42""
+    JSON.stringify(null);   //"null"
+    JSON.stringify(true);   //"true"
+    JSON.stringify(undefined);  //undefined
+    JSON.stringify( function(){} ); //undefined
+    JSON.stringify([1,undefined,function(){},4]);   //"[1,null,null,4]"
+    JSON.stringify({a:2, b:function(){}});  //"{"a":2}"
+    var a = {
+        b:42,
+        c:"42",
+        d:[1,2,3]
+    };
+    JSON.stringify(a, ["b","c"]);   //"{"b":42,"c":"42"}"
+    JSON.stringify(a,null,3);
+    // "{
+    //      "b": 42,
+    //      "c": "42",
+    //      "d": [
+    //          1, 
+    //          2,
+    //          3
+    //        ]
+    // }"
+    JSON.stringify( a, null, "-----" );
+    // "{
+    // -----"b": 42,
+    // -----"c": "42",
+    // -----"d": [
+    // ----------1,
+    // ----------2,
+    // ----------3
+    // -----]
+    // }
+ ```  
+ JSON.stringify(..)传递一个可选参数 replacer，它可以是数组或者函数，用来指定对象序列化过程中哪些属性应该被处理，哪些应该被排除。
+
+ JSON.stringify(..)传递一个可选参数 space。space 为正整数时是指定每一级缩进的字符数，它还可以是字符串，此时最前面的十个字符被用于每一级的缩进。
+
+ ToNumber
+ toNumber(): true 转换为 1，false 转换为 0。undefined 转换为 NaN，null 转换为 0。
+
+ ToBoolean
+ * 假值（falsy value）
+    undefined / null / false / +0、-0 和 NaN / ""
+    布尔强制类型转换结果为 false
+    document.all 为假值
+ * 真值（truthy value）
+    真值就是假值列表之外的值
+
+显式强制类型转换
+ * 字符串和数字之间的显式转换
+ ```javascript
+    var a = 42;
+    var b = String(a); //转换为字符串
+    var b = a.toString();
+    var c = "3.14";
+    var d = Number(c); //转换为数值
+    var d = +c;
+    - -"3.14"; //3.14
+ ```
+ * 日期显式转换为数字
+ ```javascript
+    var d = new Date();
+    +d; //1408369986000,获得时间戳
+    d.getTime();//获得指定时间的时间戳
+    Date.now();//获得当前时间的时间戳
+ ```
+ 注：构造函数没有参数时可以不带()。
+ * ~ 运算符
+ ~ 运算符（即字位操作“非”），执行 ToInt32 转换，然后执行字位操作“非”
+ | 运算符（即字位操作“或”），仅执行 ToInt32 转换
+
+ ~x 大致等同于 -(x+1)，例如 `~42; //-43`
+
+ 作用：强制转换真假值，-1为假值
+ * 字位截除
+ ~~ 截除数字值的小数部分
+ * 显示解析数字字符串
+ ```javascript
+    var  a = "42";
+    var  b = "42px";
+    Number( a );//42
+    parseInt( a );//42
+    Number( b );//NaN
+    parseInt( b ); 42
+ ```
