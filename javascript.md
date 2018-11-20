@@ -170,7 +170,7 @@ document.querySelector() 选择一个css选择符
 document.querySelectorAll() 返回List
 document.matchesSelector() 返回true或者false
 
-document.readyState 'loading'或'complete'
+document.readyState 'loading'或'loaded'或'interactive'或'complete'
 someNode.innerHTML()
 someNode.insertAdjacentHTML() 插入位置和要插入的HTML文本 
 someNode.scrollIntoView()
