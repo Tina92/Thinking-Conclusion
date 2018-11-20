@@ -1,3 +1,5 @@
+webpack是一个打包模块化js的工具，可以通过loader转换文件，通过plugin扩展功能。
+
 # webpack 核心概念
 <ul>
     <li>entry 一个可执行模块或库的入口文件。</li>
@@ -7,6 +9,8 @@
 </ul>
 
 # webpack 文件配置
+
+单页应用 & npm包
 ```javascript
     const { WebPlugin } = require('web-webpack-plugin');
     module.exports = {
@@ -39,4 +43,80 @@
     };
 ```
 
+服务端渲染
+```javascript
+    module.exports = {
+        target: 'node', //'node' 指明构建出的代码是要运行在node环境里
+        entry: {
+            'server_render': './src/server_render',
+        },
+        output: {
+            filename: './dist/server/[name].js',
+            libraryTarget: 'commonjs2', // 指明输出的代码要是commonjs规范
+        },
+        module: {
+            rules: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.(scss|css|pdf)$/, //防止不能在node里执行服务端渲染也用不上的文件被打包进去
+                loader: 'ignore-loader',
+            },
+            ]
+        },
+    };
+```
 
+# webpack loader
+ 如果你的扩展是想对一个个单独的文件进行转换那么就编写loader
+ ```javascript
+    module.exports = function (content) {
+        return replace(content);
+    };// 编写 webpack loader
+ ```
+ eg:
+ <ul>
+    <li>babel-loader把es6转换成es5</li>
+    <li>file-loader把文件替换成对应的URL</li>
+    <li>raw-loader注入文本文件内容到代码里去</li>
+ </ul>
+
+# webpack plugin
+
+```javascript
+class EndWebpackPlugin {
+
+    constructor(doneCallback, failCallback) {
+        this.doneCallback = doneCallback;
+        this.failCallback = failCallback;
+    }
+
+    apply(compiler) {
+        // 监听webpack生命周期里的事件，做相应的处理
+        compiler.plugin('done', (stats) => {
+            this.doneCallback(stats);
+        });
+        compiler.plugin('failed', (err) => {
+            this.failCallback(err);
+        });
+    }
+}
+
+module.exports = EndWebpackPlugin;
+```
+webpack plugin 里有2个核心概念：
+<ul>
+    <li>Compiler: 从webpack启动到推出只存在一个Compiler，Compiler存放着webpack配置</li>
+    <li>Compilation: 由于webpack的监听文件变化自动编译机制，Compilation代表一次编译。</li>
+</ul>
+Compiler 和 Compilation 都会广播一系列事件。
+
+# 功能
+ 代码分割优化
+
+ eg:先抽出基础库到一个单独的文件而不是和其它文件放在一起打包为一个文件，这样做的好处是只要你不升级他们的版本这个文件永远不会被刷新
+
+# 生命周期
+ <img src="./webpack.jpg">
