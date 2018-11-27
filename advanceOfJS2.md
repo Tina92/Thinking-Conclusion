@@ -354,3 +354,28 @@ NaN 是 Javascript 中唯一一个不等于自身的值
 
  * 宽松相等和严格相等
  `==`和`===`的区别：`==`允许在相等比较中进行强制类型转换，而`===`不允许
+
+ eg: 其他类型和布尔类型之间的相等比较
+ ```javascript
+    var a = "42";
+    var b = true;
+    a == b; // false a==ToNumber(b)  42 == 1
+ ```
+
+  * null 和 undefined 之间的相等比较
+ ```javascript
+    var a = null;
+    var b;
+    a == b; // true
+ ```
+
+ * 抽象关系比较
+ a < b 中涉及的隐式强制类型转换,首先调用 ToPrimitive 返回的是字符串
+ eg 
+ ```javascript
+        var a = [ 42 ];
+        var b = [ "43" ];
+        var c = [ "043" ];
+        a < b; // true
+        a < c; // false
+```

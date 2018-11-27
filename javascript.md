@@ -345,3 +345,9 @@ define(function(require, exports, module) {
 })
 
 ES6 import/export实现模块的输入输出。其中import命令用于输入其他模块提供的功能，export命令用于规定模块的对外接口。
+
+* 延长作用域链
+ <ul>
+    <li>try-catch语句的catch块</li>
+    <li>with</li>
+ </ul>
