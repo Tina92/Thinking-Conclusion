@@ -1,7 +1,7 @@
-#React Native
-##jsx 语法
+# React Native
+## jsx 语法
 
-##Basic
+## Basic
 + props
 自定义组件通过props实现父级与子级组件的通信，子组件中在`render`函数中引用 `this.props`
 
@@ -90,4 +90,7 @@
     * Fetch 有可选的第二个参数，可以用来定制 HTTP 请求一些参数,header、提交方法、提交数据
     * 处理服务器的响应数据
         fetch的返回是一个 promise 对象，可以使用 `async/await` 语法
-    * RN中内置了
+    * RN中内置了 `XMLHttpRequestAPI`,可以使用部分ajax库,例如`frisbee`和`axios`
+    * RN也支持 `websocket`
+    * fetch默认不携带cookie的，要想携带cookie，需要添加：`credentials: 'include'`
+    * 重定向需要手工实现
