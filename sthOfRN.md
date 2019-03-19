@@ -154,22 +154,110 @@
         - 不能直接设置一整颗子树的默认样式，大部分情况下样式不继承，但文本标签的子树样式继承
         - props
             - selectable - 决定用户是否可以长按选择文本，以便复制和粘贴
-            - accessibilityHint - 
-            - accessibilityLabel
-            - accessible
-            - ellipsizeMode
-            - nativeID
-            - numberOfLines
-            - onLayout
-            - onLongPress
-            - onPress
-            - pressRetentionOffset
-            - allowFontScaling
-            - style
-            - testID
-            - disabled
-            - selectionColor
-            - textBreakStrategy
-            - adjustsFontSizeToFit
-            - minimumFontScale
-            - suppressHighlighting
+            - accessibilityHint - 提醒接下来的操作会有什么影响
+            - accessibilityLabel - “读屏器”（对视力障碍人士的辅助功能）阅读的文字
+            - accessible - 此属性为 true 时，表示此视图是一个启用了无障碍功能的元素
+            - ellipsizeMode - 当 Text 组件无法全部显示需要显示的字符串时如何用省略号进行修饰。head/middle/tail/clip
+            - nativeID - 从原生类定位这个视图，关闭了视图的'layout-only view removal'优化
+            - numberOfLines - 当文本过长的时候裁剪文本，包括折叠产生的换行在内，总的行数不会超过属性限制。
+            - onLayout - 加载时或者布局变化后调用
+            - onLongPress - 文本被长按以后调用此回调函数
+            - onPress - 文本被点击以后调用此函数
+            - pressRetentionOffset - 该设置当视图滚动禁用的情况下，可以定义当手指距离组件的距离。当大于该距离该组件会失去响应。当少于该距离的时候，该组件会重新进行响应。确保你传入一个常量来减少内存分配。
+            - allowFontScaling - 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放
+            - style - view styles 样式
+            - testID - 在端到端测试中定位此视图
+            - disabled - 因为测试的目的，特地将文本视图禁用，仅限Android
+            - selectionColor - 文本的高亮颜色，仅限Android
+            - textBreakStrategy -  英文文本的分段策略， simple/highQuality/balanced
+            - adjustsFontSizeToFit - 指定字体是否随着给定样式的限制而自动缩放,仅限IOS
+            - minimumFontScale - 指定最小的缩放比，0.01-1，仅限IOS
+            - suppressHighlighting - 设为true时，当文本被按下会没有任何视觉效果。默认情况下，文本被按下时会有一个灰色的、椭圆形的高光。仅限IOS
+    * Image 显示图片内容的组件
+        `<Image source={} />`
+        - 默认情况下 Android 不支持 GIF 和 WebP 格式，需要在android/app/build.gradle文件中手动添加模块
+        - props
+            - style - borderTopRightRadius/backfaceVisibility/borderBottomLeftRadius/borderBottomRightRadius/borderColor/borderRadius/borderTopLeftRadius/backgroundColor/borderWidth/opacity/overflow/resizeMode/tintColor/overlayColor
+            - blurRadius - 为图片添加一个指定半径的模糊滤镜。
+            - onLayout - 元素加载或者布局改变时调用
+            - onLoad - 加载成功完成时调用此函数
+            - onLoadEnd - 加载完成时都调用（无论成功还是失败）
+            - onLoadStart - 加载开始时调用
+            - resizeMode - 当组件尺寸和图片尺寸不成比例时如何调整图片大小 cover/contain/stretch/repeat/center
+            - source - 图片源数据 png、jpg、jpeg、bmp、gif、webp(android)、psd(ios)
+            - loadingIndicatorSource - 表示在真正图片在加载过程中所显示的图片，擅长加载网络图片。
+            - onError - 加载错误的时候调用此函数
+            - testID - 在自动测试脚本中表示这个唯一的资源标识符
+            - resizeMethod - 当图片尺寸和容器尺寸不成比例时如何调整图片大小 auto/resize/scale
+            - accessibilityLabel - 读屏器（无障碍功能）会朗读你所设置的这段文字。(IOS)
+            - accessible - 是否启用了无障碍功能（IOS）
+            - capInsets - 图片被缩放的时候，capInsets 指定的角上的尺寸会被固定而不进行缩放
+            - defaultSource - 读取图片时默认显示的图片
+            - onPartialLoad - 在逐步加载的过程中调用此方法
+            - onProgress - 在加载过程中不断调用
+            - fadeDuration - 淡出时间，默认300ms（Android）
+            - progressiveRenderingEnabled - 允许渐进jpeg流（Android）
+        - function
+            - getSize - 获取图片的宽高
+            - prefetch - 预加载一个远程图片
+            - abortPrefetch - 中断预加载操作（Android）
+            - queryCache - 查询图片缓存状态
+            - resolveAssetSource - 获取图片加载信息的对象
+    * TextInput 文本输入框
+        `<TextInput onChangeText={} />`
+        - 有些属性仅在`multiline`为true或者false时有效，边框样式仅在`multiline=false`时有效
+        - Android和ios显示一致，需要设置padding：0
+        - 长按文本绝对定位元素会被键盘影响，AndroidManifest.xml对应修改
+        - props
+           - allowFontScaling - 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放
+           - autoCapitalize - 是否要自动将特定字符切换为大写 characters/words/sentences/none
+           - autoComplete - 自动填充
+           - autoCorrect - 是否开启拼写自动纠正
+           - autoFocus - 在组件渲染完成后获得焦点
+           - blurOnSubmit - 文本框在提交时是否失焦
+           - caretHidden - 是否隐藏光标
+           - clearButtonMode - 是否要在文本框右侧显示“清除”按钮。仅在单行模式下可用。
+           - clearTextOnFocus - 每次开始输入时清除文本框内容
+           - contextMenuHidden - 右键菜单是否隐藏
+           - dataDetectorTypes - 检测textinput内能被转化为点击URL的数据
+           - defaultValue - 文本框初始值
+           - disableFullscreenUI - 是否自动检测成为全屏模式
+           - editable - 文本框是否可编辑
+           - enablesReturnKeyAutomatically - 文本框内没有文字时是否禁用确认按钮
+           - inlineImageLeft - 指定图片放置在左侧，图片必须放置在/android/app/src/main/res/drawable目录下
+           - inlineImagePadding - 左侧图片的padding样式
+           - keyboardAppearance - 键盘颜色 default/light/dark
+           - keyboardType - 决定弹出哪种类型键盘 default/number-pad/decimal-pad/numeric/phone-pad/email-address
+           - maxLength - 本框中最多的字符数
+           - multiline - 多行还是单行
+           - numberOfLines - 输入框的行数（Android）
+           - onBlur - 文本框失去焦点时调用
+           - onChange - 文本框内容变化时调用函数
+           - onChangeText - 文本框内容变化时调用函数
+           - onContentSizeChange - 当输入框规模变化时调用
+           - onEndEditing - 文本输入结束后调用
+           - onFocus - 文本框获得焦点时调用
+           - onKeyPress - 一个按键按下时调用
+           - onLayout - 组件加载或者布局变化的时候调用
+           - onScroll - 内容滚动时持续调用
+           - onSelectionChange - 长按选择文本时，选择范围变化时调用此函数
+           - onSubmitEditing - 软键盘确认或提交按钮按下时调用
+           - placeholder - 没有任何文字输入，会显示此字符串
+           - placeholderTextColor - 占位字符串显示的文字颜色。
+           - returnKeyLabel - 代替 returnKeyType
+           - returnKeyType - “确定”按钮显示的内容 done/go/next/search/send
+           - scrollEnabled - 是否能滚动
+           - secureTextEntry - 文本框遮住之前输入的文字，比如密码框
+           - selection - 设置选中文字的范围
+           - selectionColor - 输入框高亮的颜色
+           - selectionState - 控制文字被选择的状态 blur()/focus()/update()
+           - selectTextOnFocus - 获得焦点，所有文字都被选中
+           - spellCheck - 是否禁用拼写检查的样式
+           - style - view styles
+           - textContentType - 表示文本输入区所期望的语义
+           - textBreakStrategy - 文字断行策略(Android)
+           - underlineColorAndroid - 文本框的下划线颜色
+           - value - 文本框的文字内容
+        - function
+            - clear - 清空输入框的内容
+            - isFocused - 当前输入框是否获得焦点
