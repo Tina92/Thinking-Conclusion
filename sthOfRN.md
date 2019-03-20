@@ -261,3 +261,71 @@
         - function
             - clear - 清空输入框的内容
             - isFocused - 当前输入框是否获得焦点
+    * ScrollView 可滚动的容器视图
+        `<ScrollView></ScrollView>`
+        - ScrollView 必须有一个确定的高度才能正常工作 flex:1
+        - 注意和FlatList的区别
+        - Props
+           - alwaysBounceVertical -  属性为true时，垂直方向可以弹性地拉动一截（ios）
+           - contentContainerStyle - 样式会应用到包裹所有子视图的内容容器内
+           - disableScrollViewPanResponder - 禁用ScrollView上的默认JSPAN响应程序，将权限赋予子组件
+           - keyboardDismissMode - 用户拖拽滚动视图的时候，是否要隐藏软键盘。none/on-drag
+           - keyboardShouldPersistTaps - 点击scrollview后是否收起当前界面的软键盘 never/always/handled
+           - onContentSizeChange - 可滚动内容的视图发生变化时调用
+           - onMomentumScrollBegin - 滚动动画开始时调用
+           - onMomentumScrollEnd - 滚动动画结束时调用
+           - onScroll - 在滚动中，每帧最多调用一次此回调函数，由scrollEventThrottle来控制调用频率
+           - onScrollBeginDrag - 用户拖动视图时调用此函数
+           - onScrollEndDrag - 用户停止拖动此视图时调用此函数
+           - pagingEnabled - 滚动条会停在滚动视图尺寸整数倍的位置上，水平分页
+           - refreshControl - 下拉刷新功能
+           - removeClippedSubviews - 属性为true，屏幕外的子视图会被移除
+           - scrollEnabled - false， 内容不能滚动
+           - showsHorizontalScrollIndicator - 显示水平方向的滚动条
+           - showsVerticalScrollIndicator - 显示垂直方向滚动条
+           - stickyHeaderIndices - 决定哪些成员滚动后固定在顶端
+           - endFillColor - 指定以某种颜色来填充大于实际内容的滚动视图多余空间
+           - overScrollMode - 覆盖默认的overSccroll模式，auto/always/never
+           - scrollPerfTag - 在滚动视图上记录滚动性能的标记
+           - DEPRECATED_sendUpdatedChildFrames - 如果为true，则ScrollView将在Scroll事件中发出updateChildFrames数据
+           - alwaysBounceHorizontal - 水平方向弹性地拉动一截
+           - horizontal - 子视图是否在水平方向上排成一行
+           - automaticallyAdjustContentInsets - 滚动视图在导航条或者工具条后时，是否自动调整内容范围（IOS）
+           - bounces - 内容末尾的弹性拉动
+           - bouncesZoom - 手势缩放内容是否可以超过min/max的限制
+           - canCancelContentTouches - false,子节点有触摸操作，手指无法移动滚动视图
+           - centerContent - 内容小于滚动视图，内容居中显示
+           - contentInset - 内容范围相对滚动视图边缘的坐标
+           - contentInsetAdjustmentBehavior - 此属性指定如何使用安全区域insets来修改滚动视图的内容区域（IOS）
+           - contentOffset - 手动设置初始的滚动坐标
+           - decelerationRate - 用户抬起手指，滚动视图减速停下的速度。normal/fast
+           - directionalLockEnabled - 当值为真时，滚动视图在拖拽的时候会锁定只有垂直或水平方向可以滚动
+           - indicatorStyle - 滚动条样式 default/black/white
+           - maximumZoomScale - 允许的最大缩放比例
+           - minimumZoomScale - 允许的最小缩放比例
+           - pinchGestureEnabled - 是否允许用户使用双指缩放操作
+           - scrollEventThrottle - 控制每帧scroll事件被调用频率
+           - scrollIndicatorInsets - 决定滚动条距离视图边缘的坐标
+           - scrollsToTop - 点击状态栏的时候视图会滚动到顶部
+           - snapToAlignment - 定义停驻点和滚动视图之间的关系 start/center/end
+           - snapToInterval - 停止在 snapToInterval 的倍数的位置
+           - snapToOffsets  - 视图滚动停止在定义的偏离位置处
+           - snapToStart -  默认情况下，列表的开头计为捕捉偏移量
+           - snapToEnd - 默认情况下，列表的结尾计为捕捉偏移量
+           - zoomScale - 滚动视图当前内容缩放比例
+           - nestedScrollEnabled - 是否启用嵌套滚动
+        - function
+            - scrollTo - 滚动到指定的x, y偏移处
+            - scrollToEnd - 滚动到视图底部
+            - scrollWithoutAnimationTo - 被 scrollTo 代替
+            - flashScrollIndicators - 短暂地显示滚动显示器
+    * StyleSheet 提供类似CSS样式表的样式抽象层
+        `const styles = StyleSheet.create({})`
+        - function
+            - setStyleAttributePreprocessor - 设置用于预处理样式属性值的函数。
+            - create - 从给定对象创建StyleSheet样式引用。
+            - flatten - 将样式对象数组展平为一个聚合样式对象
+        - const
+            - hairlineWidth - 这一常量始终是一个整数的像素值,最细线标准
+            - absoluteFill - 创建具有位置绝对和零位置(position: 'absolute', left: 0, right: 0, top: 0, bottom: 0)的叠加，避免重复style
+ + 交互控件
