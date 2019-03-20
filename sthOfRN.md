@@ -329,3 +329,43 @@
             - hairlineWidth - 这一常量始终是一个整数的像素值,最细线标准
             - absoluteFill - 创建具有位置绝对和零位置(position: 'absolute', left: 0, right: 0, top: 0, bottom: 0)的叠加，避免重复style
  + 交互控件
+    * Button 按钮组件
+        `<Button onPress={} />`
+        - props
+           - onPress - 用户点击按钮时调用
+           - title - 按钮内显示的文本
+           - accessibilityLabel - 读屏器读取的内容
+           - color - 文本颜色（IOS）,按钮背景色（Android）
+           - disabled -按钮是否可点
+           - testID - 在端到端测试中定位此视图
+           - hasTVPreferredFocus - apply YV only
+    * Picker
+        `<Picker><Picker.Item label="" value=""/><Picker.Item label="" value=""/></Picker>`
+        - Props
+           - onValueChange - 某一项被选中时调用
+           - selectedValue - 默认选中的值
+           - style - view styles
+           - testID - 端对端测试中定位此视图
+           - enabled - 是否禁用此选择器
+           - mode - 选择器呈现方式 dialog(模态对话框)，dropdown(下拉框)（Android）
+           - prompt - 选择器的提示字符串（Android）
+           - itemStyle - 应用在每项标签上的样式（ios）
+    * Slider 用于选择一个范围值的组件
+        - props
+           - style - view styles
+           - disabled - 是否能够移动滑块
+           - maximumValue - 滑块的最大值
+           - minimumTrackTintColor - 滑块左侧轨道的颜色
+           - minimumValue - 滑块最小值
+           - onSlidingComplete - 用户松开滑块时调用
+           - onValueChange - 拖动滑块时调用
+           - step - 滑块步长
+           - maximumTrackTintColor - 滑块右侧轨道的颜色
+           - testID - 端对端测试中定位此视图
+           - value - 滑块的初始值
+           - thumbTintColor - 滑块按住是的颜色（Android）
+           - maximumTrackImage - 滑块右侧轨道背景图（ios）
+           - minimumTrackImage - 滑块左侧轨道背景图（ios）
+           - thumbImage - 滑块背景图（ios)
+           - trackImage - 轨道背景图(ios)
+    * Switch 开关控件
