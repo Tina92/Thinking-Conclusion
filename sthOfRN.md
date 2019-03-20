@@ -369,3 +369,12 @@
            - thumbImage - 滑块背景图（ios)
            - trackImage - 轨道背景图(ios)
     * Switch 开关控件
+        - props
+           - disabled - 是否禁用该组件的交互
+           - trackColor - 开启状态时的背景色
+           - onValueChange - 值改变时调用
+           - ios_backgroundColor - 关闭状态或者禁用状态的背景色
+           - testID - 端对端测试中定位此视图
+           - thumbColor - 开关上圆形按钮的背景颜色
+           - tintColor - 关闭状态时的边框颜色
+           - value - 开关是否打开
