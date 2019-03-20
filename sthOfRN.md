@@ -378,3 +378,103 @@
            - thumbColor - 开关上圆形按钮的背景颜色
            - tintColor - 关闭状态时的边框颜色
            - value - 开关是否打开
+ + 列表视图
+    * FlatList
+        - props
+           - ScrollView props - 继承 props
+           - VirtualizedList props - 继承 props
+           - renderItem - 从data中取出数据并渲染到列表中
+           - data - 只支持普通数组
+           - ItemSeparatorComponent - 行与行之间的分割线组件
+           - ListEmptyComponent - 列表为空时渲染该组件
+           - ListFooterComponent - 尾部组件
+           - ListHeaderComponent - 头部组件
+           - columnWrapperStyle - 多列布局，额外指定每行容器样式
+           - extraData - 除data以外的数据，放在此属性中
+           - getItemLayout - 优化选项，避免动态测量内容尺寸
+           - horizontal - 是否为水平布局模式
+           - initialNumToRender - 指定开始渲染的元素数量
+           - initialScrollIndex - 开始时屏幕顶端时第Index个元素
+           - inverted - 翻转滚动方向
+           - keyExtractor - 为给定的item生成一个不重复的 key
+           - numColumns - 多列布局只能在非水平模式下
+           - onEndReached - 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
+           - onEndReachedThreshold - 距离底部距离
+           - onRefresh - 下拉刷新
+           - onViewableItemsChanged - 可见行元素变化时调用
+           - progressViewOffset - 需要在指定的偏移处显示加载指示器
+           - legacyImplementation -  
+           - refreshing -在等待加载新数据时将此属性设为 true，列表就会显示出一个正在加载的符号
+           - removeClippedSubviews - 属性为true，屏幕外的子视图会被移除
+           - viewabilityConfig
+           - viewabilityConfigCallbackPairs
+        - function
+           - scrollToEnd - 滚动到底部
+           - scrollToIndex - 指定元素滚动到可视区指定位置
+           - scrollToItem - 顺序遍历元素
+           - scrollToOffset - 滚动列表到指定的偏移
+           - recordInteraction - 主动通知列表发生了一个事件，以使列表重新计算可视区域。
+           - flashScrollIndicators - 短暂显示滚动指示器
+    * SectionList
+        ```javascript
+        <SectionList renderItem = {({item, index, section}) => <Text key={index}>{item}</Text>} 
+            renderSectionHeader = {({section:{title}})=>(
+                <Text style={{fontWeight:"bold"}}>{title}</Text>
+            )}
+            sections = {[
+                { title:'Title1', data:["item1","item2"] },
+                { title:'Title2', data:["item1","item2"] },
+                { title:'Title3', data:["item1","item2"] }
+            ]}
+            keyExtractor = {(item,index) => item + index}
+        />
+        ```
+        - props
+           - ScrollView props... - 继承
+           - sections - 类似于 data
+           - initialNumToRender - 指定开始渲染的元素数量
+           - keyExtractor - 为给定的item生成一个不重复的 key
+           - onEndReached - 当列表被滚动到距离内容最底部不足onEndReachedThreshold的距离时调用
+           - extraData - 除data以外的数据，放在此属性中
+           - ItemSeparatorComponent - 行与行之间的分割线组件
+           - inverted - 翻转滚动方向
+           - ListFooterComponent - 尾部组件
+           - legacyImplementation
+           - ListEmptyComponent - 列表为空时渲染该组件
+           - onEndReachedThreshold - 距离底部的距离
+           - onRefresh - 下拉刷新
+           - onViewableItemsChanged - 可见行元素变化时调用
+           - refreshing - 在等待加载新数据时将此属性设为 true，列表就会显示出一个正在加载的符号
+           - removeClippedSubviews - 通常在ListView和ScrollView中使用，当组件有很多子组件不在屏幕显示范围时，可以将removeClippedSubviews设置为true，允许释放不在显示范围子组件，从而优化了性能。需要注意的是，要想让此属性生效，要确保overflow属性为默认的hidden。
+           - ListHeaderComponent - 头部组件
+           - renderSectionFooter - 每个组的尾部组件。
+           - renderSectionHeader - 每个组的头部组件。
+           - SectionSeparatorComponent - 从视觉上把section与它上方或下方的headers区别开来
+           - stickySectionHeadersEnabled - section的header粘连在屏幕顶端
+        - function
+           - scrollToLocation - 将可视区内位于特定位置的列表项滚动到指定位置
+           - recordInteraction - 主动通知列表发生了一个事件，以使列表重新计算可视区域。
+           - flashScrollIndicators - 短暂地显示滚动显示器
+        - define
+           - Section 任意类型
+ + IOS独有组件
+    * ActionSheetIOS 从设备底部弹出一个显示ActionSheet弹出框选项菜单
+    * AlertIOS 弹出一个提示对话框，还可以带有输入框
+    * DatePickerIOS 日期/时间选择器
+    * ImagePickerIOS 插入图片
+    * NavigatorIOS 页面的导航跳转
+    * ProgressViewIOS 渲染进度条
+    * PushNotificationIOS 管理推送通知，包括权限处理和应用角标数字
+    * SegmentedControllIOS 渲染一个顶部的选项卡布局
+    * TabBarIOS 渲染一个底部选项卡布局
+ + Android独有组件
+    * BackHandler 监听并处理设备上的返回按钮
+    * DatePickerAndroid 日期选择器
+    * DrawerLayoutAndroid 抽屉布局
+    * PermissionsAndroid 对Android 6.0引入的权限模型的封装
+    * ProgressBarAndroid 渲染进度条
+    * TimePickerAndroid 时间选择器
+    * ToastAndroid 弹出一个Toast提示框
+    * ToolbarAndroid 在顶部渲染一个Toolbar工具栏
+    * ViewPagerAndroid 可左右翻页滑动的视图容器
+ + 其他组件
