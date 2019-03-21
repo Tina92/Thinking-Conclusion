@@ -478,3 +478,47 @@
     * ToolbarAndroid 在顶部渲染一个Toolbar工具栏
     * ViewPagerAndroid 可左右翻页滑动的视图容器
  + 其他组件
+    * ActivityIndicator 显示一个圆形正在加载的符号
+    * Alert 弹出一个提示框，显示指定的标题和信息
+    * Animated 动画库
+    * CameraRoll 访问本地相册
+    * Clipboard 读写剪贴板内容
+    * Dimensions 获取设备尺寸
+    * KeyboardAvoidingView 随键盘升起而自动移动的视图容器
+    * Linking 与其他应用交互的通用接口
+    * Modal 覆盖全屏的模态视图
+    * PixelRatio 获取设备的像素密度
+    * RefreshControl 添加下拉刷新的功能
+    * StatusBar 控制应用顶部状态栏样式的组件
+    * WebView 在原生视图中显示Web内容的组件
+
+## 特定平台代码
+ + Platform 模块
+    `Platform.OS` 返回ios或者android
+    `Platform.select({})`,以`Platform.OS`为key值
+    `Platform.Version`,数字是android的api level,字符串为ios当前系统版本
+ + 特定平台扩展名
+    检测某个文件是否具有`.ios.`或者是`.android.`的扩展名，然后根据当前运行的平台，自动加载正确对应的文件。web端复用，则是使用.native.js的扩展名
+
+## 导航器跳转页面
+    react Navigation
+
+## 图片
+ + 静态图片资源
+    - 图片可以有`.ios.`、`.android.`、`@2x`、`@3x`后缀，根据运行平台，屏幕精度选择不同的图片
+    - require 中的图片名字，必须是静态字符串，不能是变量，因为require是在编译时期执行
+ + 静态的非图片资源
+    - 需要注意的是视频必须指定尺寸而不能使用 flex 样式
+ + 使用混合App的图片资源
+    - Xcode 的 asset 类目/Android 的 drawable 目录：只用文件名，不带路径和后缀
+    - Android 的 assets 目录： 使用 asset:/ 前缀来引用
+ + 网络图片
+    - 是运行时获得，需要指定图片尺寸，同时建议使用 https
+    - 可以添加一些请求参数：method，headers,body(请求体)
+ + URL数据图片
+    - 使用`data:`格式来显示base64图片，需要手动指定图片的尺寸（仅适用于非常小的图片）
+    - 缓存控制（iOS）
+        网络层与缓存交互的方式：  default/ reload/force-cache/only-if-cached
+ + 片边框圆角样式目前在 iOS 的图片组件上还不支持
+
+## 动画
