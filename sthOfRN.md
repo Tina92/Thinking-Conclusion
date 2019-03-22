@@ -522,3 +522,144 @@
  + 片边框圆角样式目前在 iOS 的图片组件上还不支持
 
 ## 动画
+ + Animated
+    - Animated 仅封装了四个可以动画化的组件：View、Text、Image、ScrollView
+    ```javascript
+        // 淡入动画
+        class FadeInView extends React.Component{
+            state = {
+                fadeAnim: new Animated.Value(0), //透明度初始值为0
+            }
+            componentDidMount(){
+                Animated.timing(
+                    this.state.fadeAnim.
+                    {
+                        toValue: 1,
+                        duration: 10000,
+                    }
+                ).start();
+            }
+            render(){
+                let { fadeAnim } = this.state;
+                return (
+                    <Animated.View style={{...this.props.style,opacity:fadeAnia,}}>
+                        {this.props.children}
+                    </Animated.View>
+                )
+            }
+        }
+        export default class App extends React.Component{
+            render(){
+                return (
+                    <View style={{flex:1, alignItems:'center',justifyContent:'center'}}>
+                        <FadeInView style={{width:250,height:50,backgroundColor:'powderblue'}}>
+                            <Text style={{fontSize:28, textAlign:'center',margin:10}}>Fading in</Text>
+                        </FadeInView>
+                    </View>
+                )
+            }
+        }
+    ```
+    - 配置动画
+        - Animated.timing()
+        - easing函数
+    - 组合动画
+        - parallel，sequence,stagger 和 delay 组合使用
+        - 接受执行的动画数组，调用 start/stop
+    - 合成动画值
+        - 加减乘除以及取余等运算来合成新动画值
+    - 插值
+        - interpolate()
+    - 跟踪动态值
+        - toValue 设置为动态值，而不是普通数字
+    - 跟踪手势
+        - Animated.event 输入
+    - 响应当前的动画值
+        - spring.stopAnimation(callback) 回传当前值
+        - spring.addListener(callback) 持续回调异步函数
+    - 启用原生动画驱动
+        - useNativeDriver: true 脱离js线程
+ + LayoutAnimation
+    - 全局范围内创建和更新动画
+    - 常用来更新flexbox布局
+    - ```javascript
+        // 在执行任何动画代码之前，比如在入口文件App.js中执行
+        UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+      ```
+ + others
+    - requestAnimationFrame 下一次重绘之前调用此函数
+    - setNativeProps 直接修改基于原生视图的组件的属性
+
+## 定时器
+ + setTimeout,clearTimeout
+ + setInterval,clearInterval
+ + setImmediate,clearImmediate(promise 的实现)   //稍后执行代码，有可能会延迟当前正在进行的动画
+ + requestAnimationFrame,cancelAnimationFrame   //用来执行在一段时间内控制视图动画的代码
+ + runAfterInteractions() //在稍后执行代码，不会延迟当前进行的动画
+ + InteractionManager 在工作之前确保动画和交互已经结束
+ + 卸载（unmount）组件前，一定要清除定时器
+
+## API
+ + AccessibilityInfo 查询读屏器的当前状态
+    - fetch
+    - addEventListener
+    - setAccessibilityFocus
+    - announceForAccessibility
+    - removeEventListener
+ + ActionSheetIOS IOS设备上的ActionSheet弹出框
+    - showActionSheetWithOptions
+        - options
+        - cancelButtonIndex
+        - destructiveButtonIndex
+        - title
+        - message
+        - tintColor
+    - showShareActionSheetWithOptions
+        - url
+        - message
+        - subject
+        - excludedActivityTypes
+ + Alert 提示对话框，包含对应的标题和信息,android有确认，确认取消，确认取消稍后再说
+    - alert
+ + AlertIOS
+    - alert
+    - prompt
+    - AlertType
+    - AlertButtonStyle
+    - ButtonsArray
+ + Animated 动画 Animated.value&Animated.timing() 详细见动画组件
+    - Animated.decay() - 以指定测初始速度开始变化，然后速度越来越慢
+    - Animated.spring() - 弹簧物理模型
+    - Animated.timing() - easing 函数
+ + AppRegistry 所有 RN 应用的 JS 入口
+    - setWrapperComponentProvider
+    - registerConfig
+    - registerComponent
+    - registerRunnable
+    - registerSection
+    - getAppKeys
+    - getSectionKeys
+    - getSections
+    - getRunnable
+    - getRegistry
+    - setComponentProviderInstrumentationHook
+    - runApplication
+    - unmountApplicationComponentAtRootTag
+    - registerHeadlessTask
+    - registerCancellableHeadlessTask
+    - startHeadlessTask
+    - cancelHeadlessTask
+ + AppState 运行在前台还是后台，如何来处理推送通知
+    - active 前台运行
+    - background 后台运行
+    - inactive 处在前后切换，多任务视图或者来电状态
+ + AsyncStorage 简单，异步，持久的key-value存储系统
+    - 可以替代localStorage，但建议抽象封装，不直接使用
+ + BackHandler 监听设备上的后退按钮事件
+    - exitApp
+    - addEventListener
+    - removeEventListener
+    
+    
+    
