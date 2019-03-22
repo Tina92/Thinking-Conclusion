@@ -660,6 +660,110 @@
     - exitApp
     - addEventListener
     - removeEventListener
-    
-    
-    
+ + CameraRoll 访问本地相册
+    - saveToCameraRoll
+    - getPhotos
+ + Clipboard 读写剪贴板
+    - getString
+    - setString
+ + DatePickerAndroid 日期选择器
+    - open
+    - dateSetAction
+    - dismissedAction
+ + Dimensions 获取设备屏幕的宽高
+    - set
+    - get
+    - addEventListener
+    - removeEventListener
+ + Easing 动画缓动函数
+    - back
+    - bounce
+    - ease
+    - elastic
+ + Geolocation 地理定位 修改plist和xml文件来获取权限
+    - setRNConfiguration
+    - requestAuthorization
+    - getCurrentPosition
+    - watchPosition
+    - clearWatch
+    - stopObserving
+ + ImageEditor 图片编辑
+    - cropImage
+ + ImagePickerIOS
+    - canRecordVideos
+    - canUseCamera
+    - openCameraDialog
+    - openSelectDialog
+ + ImageStore
+    - hasImageForTag
+    - removeImageForTag - 存储在 ImageStore 中的图标必须手动删除
+    - addImageFromBase64
+    - getBase64ForTag
+ + Keyboard
+    - addListener
+        - keyboardWillShow
+        - keyboardDidShow
+        - keyboardWillHide
+        - keyboardDidHide
+        - keyboardWillChangeFrame
+        - keyboardDidChangeFrame
+    - removeListener
+    - removeAllListener
+    - diamiss - 把弹出的键盘收回去，同时使当前的文本框失去焦点。
+ + LayoutAnimation
+    - configureNext - 计划下一次布局要发生的动画
+    - create 
+    - checkConfig
+    - Types
+    - Properties
+    - Presets
+    - easeInEaseOut
+    - linear
+    - spring
+ + NetInfo 获取设备当前联网状态 Android xml添加权限
+    - addEventListener
+    - removeEventListener
+    - getConnectionInfo
+    - isConnectionExpensive
+ + PanResponder 多点触摸
+    - create(config) - config包含以下内容
+        - onMoveShouldSetPanResponder
+        - onMoveShouldSetPanResponderCapture
+        - onStartShouldSetPanResponder
+        - onStartShouldSetPanResponderCapture
+        - onPanResponderReject
+        - onPanResponderGrant
+        - onPanResponderStart
+        - onPanResponderEnd
+        - onPanResponderRelease
+        - onPanResponderMove
+        - onPanResponderTerminate
+        - onPanResponderTerminationRequest
+        - onShouldBlockNativeResponder
+ + PermissionsAndroid android6.0后，一些危险权限弹出框提示，则需要写在这里
+ + PixelRatio 访问设备的像素密度
+    - get - 返回设备的像素密度
+    - getFontScale - 返回字体大小缩放比例
+    - getPixelSizeForLayoutSize - dp转化为px
+    - roundToNearestPixel
+ + PushNotificationIOS 处理应用的推送权限，权限和应用图标的角标数
+ + Share 打开一个对话框来共享文本内容
+    - share
+    - sharedAction
+    - dismissedAction
+ + Systrace 性能优化工具
+ + TimePickerAndroid android时间选择框
+    - open
+    - timeSetAction
+    - dismissedAction
+ + ToastAndroid android设备上的悬浮提示框
+ + Transforms 图像变换
+    - decomposedMatrix
+    - rotation
+    - scaleX
+    - scaleY
+    - transform
+    - transformMatrix
+    - translateX
+    - translateY
+ + Vibration 控制设备震动
