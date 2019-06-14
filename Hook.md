@@ -17,3 +17,21 @@ useEffect(() => {
     }
 })
 ```
+
+## 自定义hook
+重用某些订阅逻辑，例如重用好友在线的订阅逻辑
+```javascript
+ function useFriendStatus(friendID) {
+     const [isOnline, setIsOnline] = useState(null);
+     function handleStatusChange(status) {
+         setIsOnline(status.isOnline);
+     }
+     useEffect(()=>{
+         ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+         return ()=> {
+             ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+         }
+     });
+     return isOnline;
+ }
+```
