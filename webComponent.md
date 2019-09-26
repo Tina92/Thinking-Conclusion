@@ -46,6 +46,8 @@ window.customElements.define('user-card', UserCard);
 用户无法操控的DOM结构，保证`<template>`的稳定
 
 自定义元素 `var shadow = this.attachShadow( { mode: 'closed' } );`来开启
+`open` 表示你可以通过页面内的 JavaScript 方法来获取 Shadow DOM，例如使用`Element.shadowRoot` 属性：
+`closed` `Element.shadowRoot` 将会返回 null
 
 需要了解的 Shadow DOM相关技术：
 * Shadow host： 一个常规 DOM节点，Shadow DOM会被添加到这个节点上。
