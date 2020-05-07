@@ -1,4 +1,4 @@
-基本类型：undefined/null/boolean/number/string   typeof
+基本类型：undefined/null/boolean/number/string/bigInt(ES10)   typeof
 
 引用类型(值都是对象）：array/object/Date/RegExp/function         instanceof
 
@@ -337,13 +337,14 @@ require([module], callback);
 
 CMD推崇依赖就近，延迟执行
 模块书写：require
+```javascript
 define(function(require, exports, module) {
   var a = require('./a');
   a.doSomething();
   var b = require('./b');
   b.doSomething();
 })
-
+```
 ES6 import/export实现模块的输入输出。其中import命令用于输入其他模块提供的功能，export命令用于规定模块的对外接口。
 
 * 延长作用域链
@@ -351,3 +352,66 @@ ES6 import/export实现模块的输入输出。其中import命令用于输入其他模块提供的功能，e
     <li>try-catch语句的catch块</li>
     <li>with</li>
  </ul>
+
+* 对象转原始类型，会调用内置的[ToPrimitive]函数，对于该函数而言，其逻辑如下：
+
+如果Symbol.toPrimitive()方法，优先调用再返回
+调用valueOf()，如果转换为原始类型，则返回
+调用toString()，如果转换为原始类型，则返回
+如果都没有返回原始类型，会报错
+ 
+可以让`a==1&&a==2`为true
+```javascript
+var a = {
+  value: 0,
+  valueOf: function() {
+    this.value++;
+    return this.value;
+  }
+};
+```
+
+将类数组转化为数组
+1. `Array.prototype.slice.call(arguments)`
+2. `Array.from(arguments)`
+3. ES6展开运算符 `[...arguments]`
+4. `Array.prototype.concat.apply([], arguments)`
+
+数组扁平化 多维数组->一维数组
+```javascript
+let ary = [1, [2, [3, [4, 5]]], 6];// -> [1, 2, 3, 4, 5, 6]
+let str = JSON.stringify(ary);
+ary = ary.flat(Infinity);//1 flat
+ary = str.replace(/(\[|\])/g, '').split(',');//2 replace + split
+str = str.replace(/(\[|\])/g, '');
+str = '[' + str + ']';
+ary = JSON.parse(str);//3 replace + JSON.parse
+let result = [];
+let fn = function(ary) {
+  for(let i = 0; i < ary.length; i++) {
+    let item = ary[i];
+    if (Array.isArray(ary[i])){
+      fn(item);
+    } else {
+      result.push(item);
+    }
+  }
+}//4 普通递归
+function flatten(ary) {
+    return ary.reduce((pre, cur) => {
+        return pre.concat(Array.isArray(cur) ? flatten(cur) : cur);
+    }, []);
+}
+let ary = [1, 2, [3, 4], [5, [6, 7]]]
+console.log(flatten(ary))//5 利用reduce函数迭代
+while (ary.some(Array.isArray)) {
+  ary = [].concat(...ary);
+}//6 扩展运算符
+```
+
+高阶函数
+* 一个函数就可以接收另一个函数作为参数或者返回值为一个函数，这种函数就称之为高阶函数。
+1. map
+2. reduce
+3. filter
+4. sort
