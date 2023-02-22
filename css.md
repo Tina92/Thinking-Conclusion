@@ -21,16 +21,15 @@ eg:触发重新布局的属性有： width, height, margin, padding, border, dis
 工作原理： <img src='./postcss.png' width='200' />
 <p>SASS等工具：源代码 -> 生产环境 CSS</p>
 <p>PostCSS：源代码 -> 标准 CSS -> 生产环境 CSS</p>
-```javascript```
 eg:
-```javascript
+```
 // src/index.css 中的源码
-`* {
+* {
     transition: all .1s;
-}`
+}
 // 转换过后的代码 index.css
-`* {
+* {
     -webkit-transition: all .1s;
         transition: all .1s;
-}`
+}
 ```
