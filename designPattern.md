@@ -72,8 +72,9 @@ Simply Factory(简单工厂模式)
     }
     //创建
 var userNameAlert = popFactory('alert', '用户');
-
+```
 安全模式类
+```
 var Demo = function() {
     if (!this instanceof Demo) {
         return new Demo();
@@ -124,6 +125,7 @@ var VehicleFactory = function(subType, superType) {
 }
 ```
 Builder(建造者模式)
+```
     //创建一位人类
 var Human = function(param) {
         //技能
@@ -175,8 +177,10 @@ SlideLoopImg.prototype = new LoopImages();
 SlideLoopImg.prototype.changeImage = function() {
     //重写继承下来的切换图片的方法
 }
+```
 
 Singleton(单例模式)【 提供命名空间】
+```
 var LazySingle = (function() {
     //单例实例引用
     var _instance = null;
@@ -197,8 +201,9 @@ var LazySingle = (function() {
         return _instance;
     }
 })();
-
+```
 外观模式（ Facade）【 提供更高级的同一接口 / 处理浏览器兼容】
+```
     //为元素绑定事件
 function addEvent(dom, type, fn) {
     //支持DOM2级事件处理 addEvenetListener 浏览器
@@ -222,10 +227,11 @@ var preventDefault = function(event) {
         event.returnValue = false;
     }
 }
-
+```
 
 适配器模式（ Adapter）【 将一个类的接口转换为另一个接口， 适配异类框架， 适配参数， 适配数据， 适配服务端数据】
-适配异类框架
+```
+//适配异类框架
 //定义框架
 var A = A || {};
 //通过ID获取元素
@@ -246,7 +252,7 @@ A.on = function(id, type, fn) {
         dom['on' + type] = fn;
     }
 }
-适配jQuery库
+//适配jQuery库
 A.g = function(id) {
     //通过jQuery获取jQuery对象，然后返回第一个成员
     return $(id).get(0);
@@ -255,10 +261,10 @@ A.on = function(id, type, fn) {
     var dom = typeof id == 'string' ? $('#' + id) : $(id);
     dom.on(type, fn);
 }
-
+```
 
 适配参数
-
+```
 function doSomeThing(obj) {
     var _adapter = {
         name: 'defalutName',
@@ -271,9 +277,9 @@ function doSomeThing(obj) {
     }
     //或者 extend(_adapter,obj)注：此时可能会添加属性
 }
-
+```
 数据适配
-
+```
 function arrToObjAdapter(arr) {
     return {
         name: arr[0],
@@ -286,9 +292,9 @@ var arr = ['Javascript', 'book', '前端编程语言'，
     '8月1日'
 ];
 var adapterData = arrToObjAdapter(arr);
-
+```
 服务器端数据适配
-
+```
 function ajaxAdapter(data) {
     //处理数据并返回新数据
     return [data['key1'], data['key2']]
@@ -302,9 +308,11 @@ $.ajax({
         }
     }
 })
-
+```
 代理模式（Proxy)【跨域问题，重定向】
+
 X域中被代理页面A
+```
 <script type = 'text/javaScript'>
     function callback(data){
         console.log('成功接收数据',data);
@@ -317,8 +325,9 @@ X域中被代理页面A
     <input type='text' name='proxy' value="http://....">
     <input type='submit' value='提交'>
 </form>
-
+```
 X域中代理页面B
+```
 //将URL中searcher部分的数据解析并重组，传入回调函数
 <script>
     //页面加载后执行
@@ -340,16 +349,18 @@ X域中代理页面B
         }catch(e){}
     }
 </script>
-
+```
 Y域的接口文件C(后端接口文件)
+```
 <?php
     $proxy = $_POST["proxy"];
     $callback = $_POST["callback"];
     header("Location:".$proxy."?callback=".$callback."&arg=success");
 ?>
-
+```
 
 装饰者模式（Decorator）【给已有的功能对象添加属性和方法】
+```
 //装饰者
 var decorator = function(input,fn){
     //获取事件源
@@ -370,8 +381,9 @@ var decorator = function(input,fn){
         input.onclick = fn;
     }
 }
-
+```
 桥接模式（Bridge）【先抽象提取共用部分，然后将现实与抽象通过桥接方法链接在一起，解耦】
+```
 //抽象
 function commonFn(agruement){
     //共同方法
@@ -379,8 +391,9 @@ function commonFn(agruement){
 //链接
 var tag = document.getElementByTagName('input');
 tag[0].onclick = function(){commonFn(this);}
-
+```
 组合模式（Composite）【】
+```
 //虚拟父类Forms
 var Forms = function(){
     //子组件容器
@@ -523,8 +536,8 @@ SpanItem.prototype.add = function () {}
 SpanItem.prototype.getElement = function () {
     return this.element;
 }
-
-eg:
+```
+```
 var form = new Container('Container',document.body);
 form.add(
     new Item('account','账号').add(
@@ -545,8 +558,9 @@ form.add(
         )
     )
 ).show();
-
+```
 享元模式（Flyweight）【提取共同数据和方法作为内部数据，内部方法】
+```
 var Flyweight = function(){
     moveX : function (x) {
         this.x = x;
@@ -555,7 +569,8 @@ var Flyweight = function(){
         this.y = y;
     }
 }
-eg:
+```
+```
     var Player = function (x, y, c) {
         this.x = x;
         this.y = y;
@@ -574,10 +589,12 @@ eg:
     Player.prototype.changR = function (r) {
         this.r = r;
     }
-
+```
 
 模板方法模式（Template Method）【归一化，创建基本类，继承】
+
 eg: 提示框
+```
 var Alert = function (data) {
     //没有数据则返回，防止后面程序执行
     if (!data) {
@@ -687,8 +704,9 @@ TitleAlert.prototype.init = function () {
 eg: new TitleAlert({
     title:'提示标题'
 }).init();
-
+```
 观察者模式（Observer）【发布-订阅模式】
+```
 // 将观察者放在闭包中,当页面加载就立即执行
 var Observer = ({
     //防止消息队列暴漏而被篡改故将消息容器作为静态私有变量保存
@@ -737,7 +755,8 @@ var Observer = ({
         }
     }
 })();
-eg:
+```
+```
 //学生类
 var Student = function(result){
     var that = this;
@@ -774,9 +793,11 @@ teacher.ask('什么是设计模式');
 student3.answer('简述观察者模式');
 student3.sleep('简述观察者模式');
 //输出结果：什么是设计模式 学生3回答问题 简述观察者模式 已被注销
-
+```
 状态模式（State）【每一种条件作为对象内部的一种状态，面对不同判断结果，其实选择对象内的一种状态】
+
 eg://创建超级玛丽状态类
+```
 var MarryState = function () {
     //内部状态私有变量
     var _currentState = {},
@@ -841,10 +862,12 @@ marry.change('jump', 'shoot')  //添加跳跃与射击动作
      .goes()                   //执行动作
      .change('shoot')          //添加射击动作
      .goes();                  //执行动作
-
+```
 
 策略模式（Strategy）【优化分支语句，封装】
+
 eg://表单正则验证策略对象
+```
 var InputStrategy = function () {
     var strategy = {
         //是否为空
@@ -891,11 +914,14 @@ $tag('input')[1].onclick = function () {
     //获取日期格式验证结果
     $tag('span')[0].innerHTML = InputStrategy.check('nickname',value);
 }
-
+```
 
 职责链模式（Chain of Responsibility）【需求颗粒化】
+
 eg: 提交表单需求 请求模块 — 响应数据适配模块 - 创建组件模块 - 单元测试
+
 ① 请求模块
+```
 var sendData = function (data, dealType, dom) {
     // XHR 对象 简化版本 IE另行处理
     var xhr = new XMLHttpRequest(),
@@ -918,7 +944,9 @@ var sendData = function (data, dealType, dom) {
     xhr.open("get", url, true);
     xhr.send(null);
 }
+```
 ② 响应数据适配模块
+```
 var dealData = function (data, dealType, dom) {
     //对象toString 方法简化引用
     var dataType = Object.prototype.toString.call(data);
@@ -948,8 +976,9 @@ var dealData = function (data, dealType, dom) {
             break;
     }
 }
-
+```
 ③ 创建组件模块
+```
 var createSug = function (data, dom) {
     var i = 0, len = data.length, html = '';
     //拼接每一条提示语句
@@ -964,12 +993,14 @@ var createValidataResult = functin(data, dom){
     //显示校验结果
     dom.parentNode.getElementByTagName('span')[0].innerHTML = data;
 }
-
+```
 ④ 单元测试
+```
 dealData('用户名不正确', 'validate',input[0]);
 dealData(123, 'sug', input[1]);
-
+```
 命令模式（Command）【将创建模块的逻辑封装在一个对象里】
+```
 // 模块实现模块
 var viewCommand = (function () {
     //视图创建
@@ -989,8 +1020,9 @@ var viewCommand = (function () {
         Action[msg.command].apply(Action, msg.param)
     }
 }) ();
-
+```
 eg: 绘图命令
+```
 //实现对象
 var CanvasCommand = (function() {
     //获取 canvas
@@ -1056,9 +1088,11 @@ CanvasCommand.excute([
     {command: 'fillStyle', param:'red'},
     {command: 'fillRect', param: [20,20,100,100]}
 ]);
-
+```
 访问者模式（Visitor）【不改变操作对象的同时，为它添加新的操作方法】
+
 对象访问器
+```
 //访问器
 var Visitor = (function () {
     return {
@@ -1089,8 +1123,9 @@ var Visitor = (function () {
 })();
 var a = new Object();   //a.length = undefined
 Visitor.push(a, 1,2,3,4); //a={0:1,1:2,2:3,3:4}
-
+```
 中介者模式（Mediator）【单向通信】
+```
 //中介者对象
 var Mediator = function () {
     // 消息对象
@@ -1158,9 +1193,11 @@ var Mediator = function () {
         }
     }
 })();
-
+```
 备忘录模式（Memento）【缓存数据】
+
 eg: 新闻缓存类
+```
 // Page 备忘录类
 var Page = function () {
     //信息缓存对象
@@ -1198,8 +1235,9 @@ var Page = function () {
          }
      }
 }()
-
+```
 迭代器模式（Iterator）【顺序一次访问聚合对象内部的元素】
+```
 //迭代器
 var Iterator = function (item, container) {
     //获取父容器，若container参数存在，并且可以获取该元素则获取，否则获取 document
@@ -1234,8 +1272,9 @@ console.log(demo.first());
 demo.dealEach(function (text, color) {
     ...
 },'test', 'pink');
-
+```
 解释器模式（Interpreter）【文法表示】
+```
 //XPath 解释器
 var Interpreter = (function () {
     //获取兄弟元素名称
@@ -1315,8 +1354,9 @@ var Interpreter = (function () {
 
 var path = Interpreter(document.getElementById('..'));
 console.log(path.join('>'));
-
+```
 链模式（Operate of Responsibility）【实现对同一个对象多个方法链式调用,关键字：extend】
+```
 var A = function (selector) {
     return new A.fn.init(selector);
 }
@@ -1371,8 +1411,9 @@ A.author //111
 // 拓展A方法二
 A.extend({nickname: '222'});
 console.log(A.nickname); //222
-
+```
 委托模式（Entrust）【将子元素的事件委托给父元素，然后通过事件冒泡传递】
+```
 <div id="article">
     <p>第一段文字</p>
 </div>
@@ -1386,8 +1427,9 @@ article.onclick = function () {
 var p = document.createElement('p');
 p.innerHTML = '新增一段内容';
 article.appendChild(p);
-
+```
 数据访问对象模式（Data access object-DAO）
+```
 /**
  * 本地存储类
  * 参数 preId 本地存储数据库前缀
@@ -1521,8 +1563,9 @@ article.appendChild(p);
         }
      }
  }
-
+```
  节流模式（Throttler）【清除计时器，延迟执行函数,延迟加载优化】
+ ```
  //节流器
  var throttler = function () {
      //获取第一个参数
@@ -1554,8 +1597,9 @@ article.appendChild(p);
          }, p.time)
      }
  }
-
+```
  简单模板模式（Simple template）【优化内存开销，减少节点操作】
+ ```
  //模板渲染方法
  A.formateString = function(str, data){
      return str.replace(/\{#(\w+)#\}/g, function(match, key){return typeof data[key] === undefined ? '' : data[key
@@ -1595,7 +1639,7 @@ article.appendChild(p);
          return v[name] ? v[name] : ('<' + name + '>{#' + name + '#}</' + name + '>');
      }
  }
- eg： 
+ 
  'listPart' : function (data) {
      // .......
         //模块模板
@@ -1604,9 +1648,11 @@ article.appendChild(p);
         liTpl = A.formateString(A.view('li'),{li : A.view(['strong','span'])}),
     //......
  }
-
+```
 惰性模式（layier）【拖延模式，延迟执行，重定义】
+
 第一种：加载即执行
+```
 //添加绑定事件方法on
 A.on = function (dom, type, fn) {
     //如果支持addEventListener方法
@@ -1631,8 +1677,9 @@ A.on = function (dom, type, fn) {
     }
 }();
 A.on //重定义A.on方法
-
+```
 第二种：惰性执行
+```
 //添加绑定事件方法on
 A.on = function (dom, type, fn) {
     //如果支持addEventListener方法
@@ -1658,8 +1705,9 @@ A.on = function (dom, type, fn) {
     A.on(dom, type, fn);
 }
 A.on(document.body,'click', functin(){}) //给元素绑定事件时，A.on重定义
-
+```
 参与者模式（Participator）【在特定作用域执行特定任务 call apply bind】
+```
 //函数柯里化
 function curry(fn) {
     // 缓存数组 slice 方法 Array.prototype.slice
@@ -1696,8 +1744,9 @@ if(Function.prototype.bind == undefined){
         }
     }
 }
-
+```
 等待者模式（waiter）【when, done, fail 】
+```
 //等待对象
 var Waiter = function () {
     //注册了的等待对象容器
@@ -1803,9 +1852,10 @@ var Waiter = function () {
         return that;
     }
 }
-
+```
 模块化
 同步模块模式（SMD）【 】
+```
 //模块管理器
 //定义模块管理器单体对象
 var F = F || {};
@@ -1917,9 +1967,10 @@ F.module = function () {
     // 执行回调执行函数
     fn.apply(null, modules);
 }
-
+```
 
 异步模块模式（AMD）【】
+```
 //向闭包中传入模块管理器对象F
 ~(function (F) {
     // 模块缓存器。存储已创建模块
@@ -2050,8 +2101,9 @@ F.module = function () {
           _script.src = src;    //文件路径
           document.getElementByTagName('head')[0].appendChild(_script); //插入页面中
       };
-
+```
 Widget模式【页面组件化】
+```
 //模板引擎模板
 F.module('lib/template', function () {
     //模板引擎 处理数据和编译模板入口
@@ -2130,8 +2182,9 @@ F.module('lib/template', function () {
         };
     return _TplEngine;
 })
-
+```
 MVC模式（model-view-controller）
+```
 //页面加载后创建MVC对象
 $(function () {
     // 初始化 MVC 对象
@@ -2192,8 +2245,9 @@ $(function () {
         var C = {};
     }();
 });
-
+```
 MVP 模式（model - view - presenter）【】
+```
 // MVP 模块
 ~(function(window){
     // MVP 构造函数
@@ -2342,8 +2396,9 @@ MVP 模式（model - view - presenter）【】
     // 暴露MVP对象， 这样即可在外部访问MVP
     window.MVP = MVP;
 })(window)
-
+```
 MVVM模式（model-view-viewModel）【】
+```
 //屏蔽压缩报错
 ~(function () {
     // 在闭包中获取全局变量
@@ -2455,3 +2510,4 @@ MVVM模式（model-view-viewModel）【】
     // 将视图模型对象绑定在Window上， 供外部获取
     window.VM = VM;
 })();
+```
