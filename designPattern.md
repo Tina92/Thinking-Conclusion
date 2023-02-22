@@ -1,34 +1,38 @@
 JS创建对象
 1. 对象字面量的方式
-var person = { 'firstName': 'abc' }
+`var person = { 'firstName': 'abc' }`
 
 2. 构造函数创建对象
-
+```
 function person(firstName) {
     this.firstName = firstName;
 }
 var newPerson = new person('abc');
-
+```
 3. 原型方式创建对象
-
+```
 function person(firstName) {}
 person.prototype.firstName = 'abc';
 var newPerson = new person();
-
+```
 4. 工厂模式创建对象（ 内置对象）
+```
 var person = new Object();
 person.firstName = 'abc';
-
+```
 JS继承方式
 1. 原型继承
+```
 subClass.prototype = new superClass();
+```
 2. 构造函数继承
-
+```
 function subClass(agruement) {
     superClass.call(this, agruement);
 }
+```
 3. 组合继承
-
+```
 function superClass(name) {
     this.name = name;
 }
@@ -44,10 +48,11 @@ subClass.prototype = new superClass();
 subClass.prototype.getTime = function() {
     console.log(this.time);
 };
-
+```
 
 Simply Factory(简单工厂模式)
-eg: function popFactory(type, text) {
+```
+ function popFactory(type, text) {
         //创建一个对象， 并对对象拓展属性和方法
         var o = new Object();
         o.content = text;
@@ -74,9 +79,10 @@ var Demo = function() {
         return new Demo();
     }
 }
-
+```
 Factory Method(工厂方法模式)
-eg: var Factory = function(type, content) {
+```
+ var Factory = function(type, content) {
     if (this instanceof Factory) {
         var s = new this[type](content);
         return s;
@@ -97,8 +103,9 @@ Factory.prototype = {
         })(content)
     }
 }
-
+```
 Abstract Factory(抽象工厂模式)
+```
 var VehicleFactory = function(subType, superType) {
     //判断抽象工厂中是否有该抽象类
     if (typeof VehicleFactory[superType] === 'function') {
@@ -115,7 +122,7 @@ var VehicleFactory = function(subType, superType) {
         throw new Error('未创建该抽象类');
     }
 }
-
+```
 Builder(建造者模式)
     //创建一位人类
 var Human = function(param) {
